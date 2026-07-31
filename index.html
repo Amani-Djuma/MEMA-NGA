@@ -872,7 +872,18 @@
             const numeroWhatsApp = "243823176942";
             let textePoids = poidsColis.includes("Plus de 1.5 kg") ? "⚠️ Plus de 1.5 kg (Facturation autre)" : "✅ 1.5 kg ou moins (Standard)";
 
-            const message = `Bonjour Mema Nga (Porte-moi),%0A%0AJ'ai une course / un colis à confier :%0A%0A*👤 Nom* : ${nom}%0A*📞 Téléphone* : ${telephone}%0A*📍 Zone* : ${zone}%0A*🔄 Service* : ${typeService}%0A*⚖️ Poids* : ${textePoids}%0A*📍 Point de départ* : ${lieuDepart}%0A*🏁 Destination* : ${lieuArrivee}%0A*📦 Contenu* : ${contenuColis}%0A*⏰ Heure limite* : ${heureLimite}%0A*📝 Instructions* : ${instructions || 'Aucune'}%0A%0A*(Rappel : J'envoie ci-dessous ma photo, ma pièce d'identité et ma preuve de paiement).*`;
+            const message = `Bonjour Mema Nga (Porte-moi),%0A%0AJ'ai une course / un colis à confier :%0A%0A
+                            `*👤 Nom* : ${nom}%0A
+                            `*📞 Téléphone* : ${telephone}%0A
+                            `*📍 Zone* : ${zone}%0A
+                            `*🔄 Service* : ${typeService}%0A
+                            `*⚖️ Poids* : ${textePoids}%0A
+                            `*📍 Point de départ* : ${lieuDepart}%0A
+                            `*🏁 Destination* : ${lieuArrivee}%0A
+                            `*📦 Contenu* : ${contenuColis}%0A
+                            `*⏰ Heure limite* : ${heureLimite}%0A
+                            `*📝 Instructions* : ${instructions || 'Aucune'}%0A%0A
+                            `*(Rappel : J'envoie ci-dessous ma photo, ma pièce d'identité et ma preuve de paiement).*`;
 
             window.open(`https://wa.me/${numeroWhatsApp}?text=${message}`, '_blank');
         }
