@@ -30,49 +30,6 @@
             line-height: 1.6;
         }
 
-        /* SPLASH SCREEN AVEC LOGO ANIMÉ (2 SECONDES) */
-
-        /* ANIMATIONS AVANCÉES DU LOGO */
-        @keyframes logoAdvancedAnim {
-            0% {
-                transform: scale(0.3) rotate(-180deg);
-                opacity: 0;
-            }
-            50% {
-                transform: scale(1.1) rotate(10deg);
-                opacity: 1;
-            }
-            100% {
-                transform: scale(1) rotate(0deg);
-                opacity: 1;
-            }
-        }
-
-        @keyframes logoSpinPulse {
-            0%, 100% {
-                transform: scale(1);
-            }
-            50% {
-                transform: scale(1.08);
-            }
-        }
-
-        @keyframes fadeInUp {
-            from {
-                opacity: 0;
-                transform: translateY(15px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        @keyframes loadProgress {
-            0% { transform: translateX(-100%); }
-            100% { transform: translateX(0%); }
-        }
-
         /* NAVIGATION MODERNISÉE & ULTRA RESPONSIVE */
         header {
             background: rgba(255, 255, 255, 0.95);
@@ -489,6 +446,7 @@
     </style>
 </head>
 <body>
+
     <!-- NAVIGATION -->
     <header>
         <div class="logo-area">
@@ -733,16 +691,6 @@
 
     <!-- SCRIPTS -->
     <script>
-        // Disparition automatique du Splash Screen après exactement 2 secondes (2000 ms)
-        window.addEventListener('load', () => {
-            setTimeout(() => {
-                const splash = document.getElementById('splashScreen');
-                if (splash) {
-                    splash.classList.add('fade-out');
-                }
-            }, 2000);
-        });
-
         function toggleMenu() {
             const navLinks = document.getElementById('navLinks');
             navLinks.classList.toggle('active');
@@ -783,10 +731,8 @@
 
             // Message WhatsApp très visible, structuré, espacé et élégant
             const message = `🚀 *NOUVELLE COMMANDE - MEMA NGA* 🚀%0A%0A` +
-                            `━━━━━━━━━━━━━━━━━━━━━━%0A` +
                             `👤 *CLIENT :* ${nom}%0A` +
                             `📞 *TÉLÉPHONE :* ${telephone}%0A` +
-                            `━━━━━━━━━━━━━━━━━━━━━━%0A%0A` +
                             `📍 *ZONE TARIFAIRE :* ${zone}%0A` +
                             `🔄 *TYPE DE SERVICE :* ${typeService}%0A` +
                             `⚖️ *POIDS DU COLIS :* ${textePoids}%0A%0A` +
@@ -795,7 +741,6 @@
                             `📦 *CONTENU DU COLIS :* ${contenuColis}%0A` +
                             `⏰ *HEURE LIMITE :* ${heureLimite}%0A` +
                             `📝 *INSTRUCTIONS :* ${instructions || 'Aucune instruction particulière'}%0A%0A` +
-                            `━━━━━━━━━━━━━━━━━━━━━━%0A` +
                             `⚠️ *(Rappel client : J'envoie ci-dessous ma photo, ma pièce d'identité et ma preuve de paiement).*`;
 
             window.open(`https://wa.me/${numeroWhatsApp}?text=${message}`, '_blank');
