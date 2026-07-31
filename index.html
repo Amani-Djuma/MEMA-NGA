@@ -872,18 +872,22 @@
             const numeroWhatsApp = "243823176942";
             let textePoids = poidsColis.includes("Plus de 1.5 kg") ? "⚠️ Plus de 1.5 kg (Facturation autre)" : "✅ 1.5 kg ou moins (Standard)";
 
-            const message = `Bonjour Mema Nga (Porte-moi),%0A%0AJ'ai une course / un colis à confier :%0A%0A
-                            `*👤 Nom* : ${nom}%0A
-                            `*📞 Téléphone* : ${telephone}%0A
-                            `*📍 Zone* : ${zone}%0A
-                            `*🔄 Service* : ${typeService}%0A
-                            `*⚖️ Poids* : ${textePoids}%0A
-                            `*📍 Point de départ* : ${lieuDepart}%0A
-                            `*🏁 Destination* : ${lieuArrivee}%0A
-                            `*📦 Contenu* : ${contenuColis}%0A
-                            `*⏰ Heure limite* : ${heureLimite}%0A
-                            `*📝 Instructions* : ${instructions || 'Aucune'}%0A%0A
-                            `*(Rappel : J'envoie ci-dessous ma photo, ma pièce d'identité et ma preuve de paiement).*`;
+            // Message WhatsApp très visible, structuré, espacé et élégant
+            const message = `🚀 *NOUVELLE COMMANDE - MEMA NGA* 🚀%0A%0A` +
+                            `━━━━━━━━━━━━━━━━━━━━━━%0A` +
+                            `👤 *CLIENT :* ${nom}%0A` +
+                            `📞 *TÉLÉPHONE :* ${telephone}%0A` +
+                            `━━━━━━━━━━━━━━━━━━━━━━%0A%0A` +
+                            `📍 *ZONE TARIFAIRE :* ${zone}%0A` +
+                            `🔄 *TYPE DE SERVICE :* ${typeService}%0A` +
+                            `⚖️ *POIDS DU COLIS :* ${textePoids}%0A%0A` +
+                            `📌 *POINT DE DÉPART :*%0A   ↳ ${lieuDepart}%0A%0A` +
+                            `🏁 *DESTINATION :*%0A   ↳ ${lieuArrivee}%0A%0A` +
+                            `📦 *CONTENU DU COLIS :* ${contenuColis}%0A` +
+                            `⏰ *HEURE LIMITE :* ${heureLimite}%0A` +
+                            `📝 *INSTRUCTIONS :* ${instructions || 'Aucune instruction particulière'}%0A%0A` +
+                            `━━━━━━━━━━━━━━━━━━━━━━%0A` +
+                            `⚠️ *(Rappel client : J'envoie ci-dessous ma photo, ma pièce d'identité et ma preuve de paiement).*`;
 
             window.open(`https://wa.me/${numeroWhatsApp}?text=${message}`, '_blank');
         }
