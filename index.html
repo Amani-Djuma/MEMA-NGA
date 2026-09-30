@@ -17,20 +17,130 @@
             --secondary: #d97706;
             --light: #f8fafc;
             --dark: #0f172a;
-            --whatsapp: #25d366;
+            --success: #16a34a;
             --border-radius: 12px;
         }
 
-        * { margin: 0; padding: 0; box-sizing: border-box; scroll-behavior: smooth; }
+        * { 
+            margin: 0; 
+            padding: 0; 
+            box-sizing: border-box; 
+            scroll-behavior: smooth; 
+        }
 
         body {
             font-family: 'Inter', sans-serif;
             background-color: var(--light);
             color: var(--dark);
             line-height: 1.6;
+            overflow-x: hidden;
         }
 
-        /* NAVIGATION MODERNISÉE & ULTRA RESPONSIVE */
+        /* SPLASH SCREEN AVEC LOGO ANIMÉ (2 SECONDES) */
+        #splashScreen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: linear-gradient(135deg, var(--dark), var(--primary));
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            z-index: 9999;
+            transition: opacity 0.5s ease, visibility 0.5s ease;
+            padding: 20px;
+        }
+
+        #splashScreen.fade-out {
+            opacity: 0;
+            visibility: hidden;
+        }
+
+        .splash-content {
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 20px;
+            max-width: 90%;
+        }
+
+        .splash-logo {
+            width: clamp(80px, 20vw, 110px);
+            height: clamp(80px, 20vw, 110px);
+            border-radius: 50%;
+            overflow: hidden;
+            background: #f1f5f9;
+            border: 3px solid var(--secondary);
+            box-shadow: 0 0 30px rgba(217, 119, 6, 0.4);
+            animation: logoAdvancedAnim 2s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+        }
+
+        .splash-logo img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            animation: logoSpinPulse 2s ease-in-out infinite;
+        }
+
+        .splash-title {
+            color: white;
+            font-size: clamp(1.4rem, 5vw, 1.8rem);
+            font-weight: 700;
+            letter-spacing: 0.5px;
+            animation: fadeInUp 0.8s ease-out 0.3s both;
+        }
+
+        .splash-title span {
+            color: var(--secondary);
+        }
+
+        .splash-loader {
+            width: clamp(100px, 40vw, 150px);
+            height: 4px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 4px;
+            overflow: hidden;
+            position: relative;
+            margin-top: 10px;
+            animation: fadeInUp 0.8s ease-out 0.5s both;
+        }
+
+        .splash-loader::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            height: 100%;
+            width: 100%;
+            background: var(--secondary);
+            animation: loadProgress 2s linear forwards;
+        }
+
+        @keyframes logoAdvancedAnim {
+            0% { transform: scale(0.3) rotate(-180deg); opacity: 0; }
+            50% { transform: scale(1.1) rotate(10deg); opacity: 1; }
+            100% { transform: scale(1) rotate(0deg); opacity: 1; }
+        }
+
+        @keyframes logoSpinPulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.08); }
+        }
+
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(15px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes loadProgress {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(0%); }
+        }
+
+        /* NAVIGATION MODERNISÉE & RESPONSIVE */
         header {
             background: rgba(255, 255, 255, 0.95);
             backdrop-filter: blur(10px);
@@ -45,11 +155,15 @@
             box-shadow: 0 4px 20px -5px rgba(0,0,0,0.05);
         }
 
-        .logo-area { display: flex; align-items: center; gap: 12px; }
+        .logo-area { 
+            display: flex; 
+            align-items: center; 
+            gap: 12px; 
+        }
         
         .logo-img-container {
-            width: 48px;
-            height: 48px;
+            width: 44px;
+            height: 44px;
             border-radius: 50%;
             overflow: hidden;
             background: #f1f5f9;
@@ -57,27 +171,29 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            cursor: pointer;
-            position: relative;
-            transition: transform 0.2s;
+            flex-shrink: 0;
         }
-        .logo-img-container:hover { transform: scale(1.05); }
         .logo-img-container img {
             width: 100%;
             height: 100%;
             object-fit: cover;
         }
-        .logo-img-container input[type="file"] {
-            position: absolute;
-            top: 0; left: 0; width: 100%; height: 100%;
-            opacity: 0;
-            cursor: pointer;
+
+        .brand-text h1 { 
+            font-size: clamp(1.1rem, 3vw, 1.25rem); 
+            color: var(--primary); 
+            font-weight: 700; 
+            line-height: 1.2; 
+        }
+        .brand-text span { 
+            font-size: 0.7rem; 
+            color: var(--secondary); 
+            font-weight: 600; 
+            text-transform: uppercase; 
+            letter-spacing: 0.8px; 
+            display: block;
         }
 
-        .brand-text h1 { font-size: 1.25rem; color: var(--primary); font-weight: 700; line-height: 1.2; }
-        .brand-text span { font-size: 0.75rem; color: var(--secondary); font-weight: 600; text-transform: uppercase; letter-spacing: 0.8px; }
-
-        /* LIENS DU HEADER DÉCORÉS */
         .nav-links {
             display: flex;
             align-items: center;
@@ -108,26 +224,6 @@
             transform: translateY(-2px);
         }
 
-        .header-contact a {
-            background: var(--whatsapp);
-            color: white;
-            padding: 10px 18px;
-            border-radius: 25px;
-            text-decoration: none;
-            font-size: 0.85rem;
-            font-weight: 600;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            transition: all 0.2s;
-            box-shadow: 0 4px 12px rgba(37, 211, 102, 0.25);
-        }
-        .header-contact a:hover { 
-            transform: translateY(-2px);
-            box-shadow: 0 6px 15px rgba(37, 211, 102, 0.35);
-        }
-
-        /* BOUTON MENU MOBILE (HAMBURGER) */
         .menu-toggle {
             display: none;
             background: none;
@@ -135,40 +231,67 @@
             font-size: 1.5rem;
             color: var(--primary);
             cursor: pointer;
+            padding: 5px;
         }
 
         /* HERO SECTION */
         .hero {
             background: linear-gradient(135deg, var(--primary), var(--dark));
             color: white;
-            padding: 70px 5%;
+            padding: clamp(40px, 8vw, 70px) 5%;
             text-align: center;
         }
-        .hero h2 { font-size: 2.2rem; margin-bottom: 15px; font-weight: 700; }
+        .hero h2 { 
+            font-size: clamp(1.5rem, 4vw, 2.2rem); 
+            margin-bottom: 15px; 
+            font-weight: 700; 
+        }
         .hero h2 span { color: var(--secondary); }
-        .hero p { font-size: 1rem; margin-bottom: 30px; max-width: 700px; margin-left: auto; margin-right: auto; opacity: 0.9; }
+        .hero p { 
+            font-size: clamp(0.9rem, 2vw, 1rem); 
+            margin-bottom: 25px; 
+            max-width: 700px; 
+            margin-left: auto; 
+            margin-right: auto; 
+            opacity: 0.9; 
+        }
 
         .hero-badges {
             display: flex;
             justify-content: center;
-            gap: 20px;
+            gap: 15px;
             flex-wrap: wrap;
-            margin-top: 25px;
+            margin-top: 20px;
             font-size: 0.85rem;
             opacity: 0.85;
         }
         .hero-badges div { display: flex; align-items: center; gap: 6px; }
         .hero-badges i { color: var(--secondary); }
 
-        /* SECTIONS */
-        .section { padding: 50px 5%; max-width: 1100px; margin: 0 auto; }
-        .section-title { text-align: center; color: var(--primary); font-size: 1.8rem; margin-bottom: 8px; font-weight: 700; }
-        .section-subtitle { text-align: center; color: #64748b; margin-bottom: 30px; font-size: 0.95rem; }
+        /* SECTIONS GENERALES */
+        .section { 
+            padding: clamp(30px, 6vw, 50px) 5%; 
+            max-width: 1100px; 
+            margin: 0 auto; 
+        }
+        .section-title { 
+            text-align: center; 
+            color: var(--primary); 
+            font-size: clamp(1.4rem, 3.5vw, 1.8rem); 
+            margin-bottom: 8px; 
+            font-weight: 700; 
+        }
+        .section-subtitle { 
+            text-align: center; 
+            color: #64748b; 
+            margin-bottom: 25px; 
+            font-size: clamp(0.85rem, 2vw, 0.95rem); 
+        }
 
-        /* GRILLE DES ZONES & TARIFS (TAILLE RÉDUITE ET COMPACTE) */
+        /* GRILLE DES ZONES & TARIFS */
         .zones-grid { 
             display: grid; 
-            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); 
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); 
             gap: 20px; 
             margin-bottom: 25px; 
         }
@@ -200,7 +323,6 @@
             text-align: center;
         }
 
-        /* AVERTISSEMENT POIDS */
         .weight-warning {
             background: #fef2f2;
             border: 1px solid #fecaca;
@@ -212,18 +334,18 @@
         }
         .weight-warning strong { color: #dc2626; }
 
-        /* SECTION CLIENTS & INDIVIDUS (TAILLE RÉDUITE ET COMPACTE) */
+        /* SECTION CLIENTS & INDIVIDUS */
         .clients-section {
             background: #ffffff;
             border: 1px solid #e2e8f0;
             border-radius: var(--border-radius);
-            padding: 30px 20px;
+            padding: clamp(20px, 4vw, 30px) 20px;
             margin-bottom: 30px;
             box-shadow: 0 4px 6px -1px rgba(0,0,0,0.02);
         }
         .clients-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
             gap: 15px;
             margin-top: 20px;
         }
@@ -260,7 +382,7 @@
             background: #ffffff;
             border: 1px solid #e2e8f0;
             border-radius: var(--border-radius);
-            padding: 40px 30px;
+            padding: clamp(20px, 4vw, 40px) 20px;
             margin-bottom: 40px;
             box-shadow: 0 4px 6px -1px rgba(0,0,0,0.02);
         }
@@ -269,11 +391,11 @@
             justify-content: center;
             align-items: center;
             flex-wrap: wrap;
-            gap: 40px;
+            gap: clamp(20px, 5vw, 40px);
             margin-top: 25px;
         }
         .partner-logo-item {
-            width: 140px;
+            width: clamp(100px, 30vw, 140px);
             height: 70px;
             display: flex;
             align-items: center;
@@ -299,14 +421,14 @@
             background: white;
             border: 1px solid #e2e8f0;
             border-radius: var(--border-radius);
-            padding: 40px 30px;
+            padding: clamp(20px, 5vw, 40px) clamp(15px, 4vw, 30px);
             box-shadow: 0 10px 25px -5px rgba(0,0,0,0.05);
         }
 
         .order-form {
             display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 20px;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px 20px;
             max-width: 900px;
             margin: 0 auto;
         }
@@ -314,7 +436,7 @@
         .form-group {
             display: flex;
             flex-direction: column;
-            gap: 8px;
+            gap: 6px;
         }
 
         .form-group.full-width {
@@ -322,7 +444,7 @@
         }
 
         .form-group label {
-            font-size: 0.88rem;
+            font-size: 0.85rem;
             font-weight: 600;
             color: var(--dark);
             display: flex;
@@ -332,7 +454,7 @@
         .form-group label i { color: var(--secondary); }
 
         .form-group input, .form-group select, .form-group textarea {
-            padding: 12px 16px;
+            padding: 10px 14px;
             border: 1px solid #cbd5e1;
             border-radius: 8px;
             font-family: 'Inter', sans-serif;
@@ -340,11 +462,76 @@
             outline: none;
             transition: border-color 0.2s;
             background: #fff;
+            width: 100%;
         }
 
         .form-group input:focus, .form-group select:focus, .form-group textarea:focus {
             border-color: var(--secondary);
             box-shadow: 0 0 0 3px rgba(217, 119, 6, 0.1);
+        }
+
+        /* MODULE DE PAIEMENT */
+        .payment-methods-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+            gap: 12px;
+            margin-top: 5px;
+        }
+
+        .payment-option {
+            position: relative;
+        }
+
+        .payment-option input[type="radio"] {
+            position: absolute;
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .payment-card {
+            border: 1.5px solid #cbd5e1;
+            border-radius: 8px;
+            padding: 12px 10px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            background: #f8fafc;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .payment-card i {
+            font-size: 1.4rem;
+        }
+
+        .payment-card span {
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: var(--primary);
+        }
+
+        .payment-option input[type="radio"]:checked + .payment-card {
+            border-color: var(--secondary);
+            background: #fffbeb;
+            box-shadow: 0 0 0 2px rgba(217, 119, 6, 0.2);
+        }
+
+        .payment-details-box {
+            display: none;
+            background: #f1f5f9;
+            border: 1px dashed #cbd5e1;
+            border-radius: 8px;
+            padding: 12px 15px;
+            margin-top: 10px;
+            font-size: 0.85rem;
+            color: var(--dark);
+        }
+
+        .payment-details-box strong {
+            color: var(--secondary);
         }
 
         .rule-notice {
@@ -353,37 +540,55 @@
             border: 1px solid #fde68a;
             border-radius: 8px;
             padding: 12px 15px;
-            font-size: 0.85rem;
+            font-size: 0.82rem;
             color: #92400e;
         }
         .rule-notice strong { color: #b45309; }
 
         .btn-submit {
             grid-column: span 2;
-            background: var(--whatsapp);
+            background: var(--primary);
             color: white;
             border: none;
-            padding: 15px;
+            padding: 14px;
             border-radius: 8px;
             font-weight: 600;
-            font-size: 1rem;
+            font-size: 0.95rem;
             display: flex;
             align-items: center;
             justify-content: center;
             gap: 10px;
             cursor: pointer;
-            transition: opacity 0.2s;
+            transition: background 0.2s;
         }
-        .btn-submit:hover { opacity: 0.9; }
+        .btn-submit:hover { background: var(--secondary); }
 
-        /* FOOTER */
+        .confirmation-box {
+            display: none;
+            grid-column: span 2;
+            background: #f0fdf4;
+            border: 1px solid #bbf7d0;
+            color: #166534;
+            padding: 20px;
+            border-radius: 8px;
+            margin-top: 15px;
+            font-size: 0.9rem;
+        }
+        .confirmation-box h3 {
+            font-size: 1rem;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
         footer {
             background: var(--dark);
             color: #94a3b8;
             padding: 40px 5%;
             text-align: center;
             font-size: 0.85rem;
-            margin-top: 60px;
+            margin-top: 40px;
         }
         footer p { margin-bottom: 8px; }
         footer span { color: var(--secondary); font-weight: 600; }
@@ -391,9 +596,9 @@
             margin-top: 15px;
             display: flex;
             justify-content: center;
-            gap: 25px;
+            gap: 20px;
             flex-wrap: wrap;
-            font-size: 0.9rem;
+            font-size: 0.85rem;
             color: #cbd5e1;
         }
         .footer-contact-info div {
@@ -405,54 +610,51 @@
             color: var(--secondary);
         }
 
-        /* RESPONSIVE DESIGN AVANCÉ POUR LA NAVIGATION & AUTRES */
-        @media (max-width: 950px) {
-            .menu-toggle {
-                display: block;
-            }
+        @media (max-width: 850px) {
+            .menu-toggle { display: block; }
             .nav-links {
                 position: absolute;
-                top: 100%;
-                left: 0;
-                width: 100%;
+                top: 100%; left: 0; width: 100%;
                 background: white;
                 flex-direction: column;
                 align-items: flex-start;
-                padding: 20px 5%;
-                gap: 15px;
+                padding: 15px 5%;
+                gap: 10px;
                 box-shadow: 0 10px 15px rgba(0,0,0,0.08);
                 border-bottom: 1px solid #e2e8f0;
                 display: none;
             }
-            .nav-links.active {
-                display: flex;
-            }
-            .nav-links a {
-                width: 100%;
-                padding: 10px;
-            }
-            .header-contact {
-                display: none;
-            }
+            .nav-links.active { display: flex; }
+            .nav-links a { width: 100%; padding: 10px; }
+            .order-form { grid-template-columns: 1fr; }
+            .form-group.full-width, .rule-notice, .btn-submit, .confirmation-box { grid-column: span 1; }
         }
 
-        @media (max-width: 850px) {
-            .hero h2 { font-size: 1.6rem; }
-            .order-form { grid-template-columns: 1fr; }
-            .form-group.full-width { grid-column: span 1; }
-            .btn-submit { grid-column: span 1; }
-            .rule-notice { grid-column: span 1; }
+        @media (max-width: 480px) {
+            .zones-grid, .clients-grid { grid-template-columns: 1fr; }
+            .hero-badges { flex-direction: column; align-items: center; gap: 8px; }
+            .payment-methods-grid { grid-template-columns: repeat(2, 1fr); }
         }
     </style>
 </head>
 <body>
 
+    <!-- ÉCRAN DE CHARGEMENT -->
+    <div id="splashScreen">
+        <div class="splash-content">
+            <div class="splash-logo">
+                <img src="LOGOM1.png" alt="Logo Mema Nga">
+            </div>
+            <div class="splash-title">Mema <span>Nga</span></div>
+            <div class="splash-loader"></div>
+        </div>
+    </div>
+
     <!-- NAVIGATION -->
     <header>
         <div class="logo-area">
-            <div class="logo-img-container" title="Cliquez pour changer votre logo">
-                <img id="logoPreview" src="LOGOM1.png" alt="Logo Mema Nga">
-                <input type="file" accept="image/png, image/jpeg" onchange="changerImage(event, 'logoPreview')">
+            <div class="logo-img-container">
+                <img src="LOGOM1.png" alt="Logo Mema Nga">
             </div>
             <div class="brand-text">
                 <h1>Mema Nga</h1>
@@ -471,12 +673,6 @@
             <a href="#commander" onclick="closeMenu()"><i class="fas fa-paper-plane"></i> Commander</a>
             <a href="#contact" onclick="closeMenu()"><i class="fas fa-address-book"></i> Contact</a>
         </nav>
-
-        <div class="header-contact">
-            <a href="https://wa.me/243823176942" target="_blank">
-                <i class="fab fa-whatsapp"></i> Contact direct
-            </a>
-        </div>
     </header>
 
     <!-- HERO -->
@@ -536,7 +732,7 @@
         </div>
     </section>
 
-    <!-- SECTION CLIENTS ET INDIVIDUS -->
+    <!-- CLIENTS -->
     <section class="section" id="clients" style="padding-top: 0; padding-bottom: 20px;">
         <div class="clients-section">
             <h2 class="section-title" style="margin-bottom: 6px; font-size: 1.5rem;">Pour Qui ? (Individus & Toute Personne)</h2>
@@ -567,41 +763,38 @@
         </div>
     </section>
 
-    <!-- SECTION PARTENAIRES -->
+    <!-- PARTENAIRES -->
     <section class="section" id="partenaires" style="padding-top: 0; padding-bottom: 20px;">
         <div class="partners-section">
             <h2 class="section-title" style="margin-bottom: 8px;">Nos Partenaires</h2>
             <div class="partners-logo-grid">
-                <div class="partner-logo-item" title="Cliquez pour changer le logo PNG du Partenaire 1">
-                    <img id="partenaire1Preview" src="LOGOACA.jpg">
+                <div class="partner-logo-item">
+                    <img id="partenaire1Preview" src="LOGOACA.jpg" alt="Partenaire 1">
                     <input type="file" accept="image/png, image/jpeg" onchange="changerImage(event, 'partenaire1Preview')">
                 </div>
-
-                <div class="partner-logo-item" title="Cliquez pour changer le logo PNG du Partenaire 2">
-                    <img id="partenaire2Preview" src="LOGOWC.png">
+                <div class="partner-logo-item">
+                    <img id="partenaire2Preview" src="LOGOWC.png" alt="Partenaire 2">
                     <input type="file" accept="image/png, image/jpeg" onchange="changerImage(event, 'partenaire2Preview')">
                 </div>
-
-                <div class="partner-logo-item" title="Cliquez pour changer le logo PNG du Partenaire 3">
-                    <img id="partenaire3Preview" src="LOGOTM.png">
+                <div class="partner-logo-item">
+                    <img id="partenaire3Preview" src="LOGOTM.png" alt="Partenaire 3">
                     <input type="file" accept="image/png, image/jpeg" onchange="changerImage(event, 'partenaire3Preview')">
                 </div>
-
-                <div class="partner-logo-item" title="Cliquez pour changer le logo PNG du Partenaire 4">
-                    <img id="partenaire4Preview" src="LOGOPM.jpg">
+                <div class="partner-logo-item">
+                    <img id="partenaire4Preview" src="LOGOPM.jpg" alt="Partenaire 4">
                     <input type="file" accept="image/png, image/jpeg" onchange="changerImage(event, 'partenaire4Preview')">
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- FORMULAIRE DE DEMANDE DÉTAILLÉE -->
+    <!-- FORMULAIRE DE DEMANDE -->
     <section class="section" id="commander" style="padding-top: 0;">
         <div class="order-section">
             <h2 class="section-title" style="margin-bottom: 8px;">Fiche de Demande Détaillée</h2>
-            <p class="section-subtitle">Remplissez ce formulaire. Les informations seront envoyées directement sur notre WhatsApp.</p>
+            <p class="section-subtitle">Remplissez ce formulaire pour valider votre demande de livraison.</p>
 
-            <form class="order-form" onsubmit="envoyerMemaNga(event)">
+            <form class="order-form" id="memaNgaForm" onsubmit="envoyerMemaNga(event)">
                 
                 <div class="form-group">
                     <label for="nom"><i class="fas fa-user"></i> Votre Nom complet</label>
@@ -611,6 +804,11 @@
                 <div class="form-group">
                     <label for="telephone"><i class="fas fa-phone"></i> Votre Téléphone</label>
                     <input type="tel" id="telephone" required placeholder="Ex: +243 812 345 678">
+                </div>
+
+                <div class="form-group">
+                    <label for="email"><i class="fas fa-envelope"></i> Votre Email (Optionnel)</label>
+                    <input type="email" id="email" placeholder="Ex: client@gmail.com">
                 </div>
 
                 <div class="form-group">
@@ -661,18 +859,75 @@
                     <input type="time" id="heureLimite" required>
                 </div>
 
+                <!-- MOYENS DE PAIEMENT AJOUTÉS -->
+                <div class="form-group full-width">
+                    <label><i class="fas fa-wallet"></i> Mode de Paiement Souhaité</label>
+                    <div class="payment-methods-grid">
+                        
+                        <label class="payment-option">
+                            <input type="radio" name="moyenPaiement" value="M-Pesa" checked onclick="afficherInfoPaiement('mpesa')">
+                            <div class="payment-card">
+                                <i class="fas fa-mobile-alt" style="color:#e11d48;"></i>
+                                <span>M-Pesa</span>
+                            </div>
+                        </label>
+
+                        <label class="payment-option">
+                            <input type="radio" name="moyenPaiement" value="Orange Money" onclick="afficherInfoPaiement('orange')">
+                            <div class="payment-card">
+                                <i class="fas fa-mobile-alt" style="color:#f97316;"></i>
+                                <span>Orange Money</span>
+                            </div>
+                        </label>
+
+                        <label class="payment-option">
+                            <input type="radio" name="moyenPaiement" value="Airtel Money" onclick="afficherInfoPaiement('airtel')">
+                            <div class="payment-card">
+                                <i class="fas fa-mobile-alt" style="color:#dc2626;"></i>
+                                <span>Airtel Money</span>
+                            </div>
+                        </label>
+
+                        <label class="payment-option">
+                            <input type="radio" name="moyenPaiement" value="Carte UBA / Virement" onclick="afficherInfoPaiement('uba')">
+                            <div class="payment-card">
+                                <i class="fas fa-credit-card" style="color:#b91c1c;"></i>
+                                <span>UBA / Carte</span>
+                            </div>
+                        </label>
+
+                        <label class="payment-option">
+                            <input type="radio" name="moyenPaiement" value="Paiement en espèces à la livraison" onclick="afficherInfoPaiement('cash')">
+                            <div class="payment-card">
+                                <i class="fas fa-money-bill-wave" style="color:#16a34a;"></i>
+                                <span>Espèces</span>
+                            </div>
+                        </label>
+
+                    </div>
+
+                    <div id="paymentDetails" class="payment-details-box" style="display: block;">
+                        Effectuez votre paiement M-Pesa au numéro : <strong>+243 823 176 942</strong> (Nom: Mema Nga)
+                    </div>
+                </div>
+
                 <div class="form-group full-width">
                     <label for="instructions"><i class="fas fa-info-circle"></i> Instructions (Optionnel)</label>
                     <textarea id="instructions" rows="2" placeholder="Précisions particulières..."></textarea>
                 </div>
 
                 <div class="rule-notice">
-                    <strong>Règle importante :</strong> Après l'envoi de votre fiche, veuillez envoyer sur WhatsApp : Votre photo,Votre pièce d'identité et La preuve de payement.
+                    <strong>Règle importante :</strong> Lors de la livraison, assurez-vous de présenter une pièce d'identité valide et d'effectuer le paiement selon le tarif convenu.
                 </div>
 
                 <button type="submit" class="btn-submit">
-                    <i class="fab fa-whatsapp"></i> Envoyer ma fiche de course sur WhatsApp
+                    <i class="fas fa-paper-plane"></i> Valider ma demande de course
                 </button>
+
+                <div class="confirmation-box" id="confirmationBox">
+                    <h3><i class="fas fa-check-circle"></i> Demande enregistrée avec succès !</h3>
+                    <p id="detailsCommande"></p>
+                </div>
 
             </form>
         </div>
@@ -691,61 +946,119 @@
 
     <!-- SCRIPTS -->
     <script>
-        function toggleMenu() {
-            const navLinks = document.getElementById('navLinks');
-            navLinks.classList.toggle('active');
-        }
+        window.addEventListener('load', () => {
+            setTimeout(() => {
+                const splash = document.getElementById('splashScreen');
+                if (splash) splash.classList.add('fade-out');
+            }, 2000);
+        });
 
-        function closeMenu() {
-            const navLinks = document.getElementById('navLinks');
-            navLinks.classList.remove('active');
-        }
+        function toggleMenu() { document.getElementById('navLinks').classList.toggle('active'); }
+        function closeMenu() { document.getElementById('navLinks').classList.remove('active'); }
 
         function changerImage(event, idCible) {
             const fichier = event.target.files[0];
             if (fichier) {
                 const lecteur = new FileReader();
-                lecteur.onload = function(e) {
-                    document.getElementById(idCible).src = e.target.result;
-                }
+                lecteur.onload = (e) => { document.getElementById(idCible).src = e.target.result; };
                 lecteur.readAsDataURL(fichier);
             }
         }
 
+        // AFFICHAGE DES INSTRUCTIONS DE PAIEMENT SÉLECTIONNÉ
+        function afficherInfoPaiement(type) {
+            const detailsBox = document.getElementById('paymentDetails');
+            detailsBox.style.display = 'block';
+
+            switch(type) {
+                case 'mpesa':
+                    detailsBox.innerHTML = 'Effectuez votre paiement M-Pesa au numéro : <strong>+243 823 176 942</strong> (Nom: Mema Nga)';
+                    break;
+                case 'orange':
+                    detailsBox.innerHTML = 'Effectuez votre paiement Orange Money au numéro : <strong>+243 890 000 000</strong> (Nom: Mema Nga)';
+                    break;
+                case 'airtel':
+                    detailsBox.innerHTML = 'Effectuez votre paiement Airtel Money au numéro : <strong>+243 990 000 000</strong> (Nom: Mema Nga)';
+                    break;
+                case 'uba':
+                    detailsBox.innerHTML = 'Paiement compte UBA RDC : <strong>05100000000-00</strong> ou par carte lors de la confirmation.';
+                    break;
+                case 'cash':
+                    detailsBox.innerHTML = 'Paiement cash en espèces à effectuer à la réception/remise du colis.';
+                    break;
+                default:
+                    detailsBox.style.display = 'none';
+            }
+        }
+
+        // FONCTION DE GÉNÉRATION DE CODE ID UNIQUE
+        function genererIdUnique() {
+            const lettres = "ABCDEFGHJKLMNPQRSTUVWXYZ";
+            const chiffres = "0123456789";
+            let res = [];
+            for (let i = 0; i < 3; i++) res.push(lettres.charAt(Math.floor(Math.random() * lettres.length)));
+            for (let i = 0; i < 5; i++) res.push(chiffres.charAt(Math.floor(Math.random() * chiffres.length)));
+            return res.sort(() => Math.random() - 0.5).join('');
+        }
+
+        // SOUMISSION ET ENREGISTREMENT EN LOCALSTORAGE
         function envoyerMemaNga(event) {
             event.preventDefault();
 
+            const newId = genererIdUnique();
             const nom = document.getElementById('nom').value;
-            const telephone = document.getElementById('telephone').value;
+            const tel = document.getElementById('telephone').value;
+            const email = document.getElementById('email').value || 'Non renseigné';
             const zone = document.getElementById('zone').value;
-            const typeService = document.getElementById('typeService').value;
-            const lieuDepart = document.getElementById('lieuDepart').value;
-            const lieuArrivee = document.getElementById('lieuArrivee').value;
-            const poidsColis = document.getElementById('poidsColis').value;
-            const contenuColis = document.getElementById('contenuColis').value;
-            const heureLimite = document.getElementById('heureLimite').value;
-            const instructions = document.getElementById('instructions').value;
+            const service = document.getElementById('typeService').value;
+            const depart = document.getElementById('lieuDepart').value;
+            const arrivee = document.getElementById('lieuArrivee').value;
+            const contenu = document.getElementById('contenuColis').value;
+            const heure = document.getElementById('heureLimite').value;
+            const instructions = document.getElementById('instructions').value || 'Aucune note';
 
-            const numeroWhatsApp = "243823176942";
-            let textePoids = poidsColis.includes("Plus de 1.5 kg") ? "⚠️ Plus de 1.5 kg (Facturation autre)" : "✅ 1.5 kg ou moins (Standard)";
+            // Récupérer le mode de paiement sélectionné
+            const paiementEl = document.querySelector('input[name="moyenPaiement"]:checked');
+            const moyenPaiement = paiementEl ? paiementEl.value : 'Non spécifié';
 
-            // Message WhatsApp très visible, structuré, espacé et élégant
-            const message = `🚀 *NOUVELLE COMMANDE - MEMA NGA* 🚀%0A%0A` +
-                            `👤 *CLIENT :* ${nom}%0A` +
-                            `📞 *TÉLÉPHONE :* ${telephone}%0A` +
-                            `📍 *ZONE TARIFAIRE :* ${zone}%0A` +
-                            `🔄 *TYPE DE SERVICE :* ${typeService}%0A` +
-                            `⚖️ *POIDS DU COLIS :* ${textePoids}%0A%0A` +
-                            `📌 *POINT DE DÉPART :*%0A   ↳ ${lieuDepart}%0A%0A` +
-                            `🏁 *DESTINATION :*%0A   ↳ ${lieuArrivee}%0A%0A` +
-                            `📦 *CONTENU DU COLIS :* ${contenuColis}%0A` +
-                            `⏰ *HEURE LIMITE :* ${heureLimite}%0A` +
-                            `📝 *INSTRUCTIONS :* ${instructions || 'Aucune instruction particulière'}%0A%0A` +
-                            `⚠️ *(Rappel client : J'envoie ci-dessous ma photo, ma pièce d'identité et ma preuve de paiement).*`;
+            const now = new Date();
+            const dateFormatted = `${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,'0')}-${String(now.getDate()).padStart(2,'0')} ${String(now.getHours()).padStart(2,'0')}:${String(now.getMinutes()).padStart(2,'0')}`;
 
-            window.open(`https://wa.me/${numeroWhatsApp}?text=${message}`, '_blank');
+            const nouvelleFiche = {
+                id: newId,
+                nom: nom,
+                tel: tel,
+                email: email,
+                zone: zone,
+                service: service,
+                adresse: `De: ${depart} -> À: ${arrivee} (Heure max: ${heure})`,
+                colis: contenu,
+                paiement: moyenPaiement,
+                date: dateFormatted,
+                statut: 'En attente',
+                notes: instructions
+            };
+
+            let fichesStockees = JSON.parse(localStorage.getItem('memaNgaFiches')) || [];
+            fichesStockees.unshift(nouvelleFiche);
+            localStorage.setItem('memaNgaFiches', JSON.stringify(fichesStockees));
+
+            const detailsBox = document.getElementById('detailsCommande');
+            const confirmationBox = document.getElementById('confirmationBox');
+
+            detailsBox.innerHTML = `
+                Merci <strong>${nom}</strong>, votre demande (#${newId}) pour <strong>${service}</strong> (${zone}) a bien été enregistrée et transmise.<br>
+                <strong>Départ :</strong> ${depart} | <strong>Destination :</strong> ${arrivee}<br>
+                <strong>Mode de paiement :</strong> ${moyenPaiement}<br>
+                <strong>Heure limite :</strong> ${heure} | <strong>Téléphone :</strong> ${tel}
+            `;
+
+            confirmationBox.style.display = 'block';
+            confirmationBox.scrollIntoView({ behavior: 'smooth' });
+            
+            document.getElementById('memaNgaForm').reset();
+            afficherInfoPaiement('mpesa'); // Réinitialiser l'affichage
         }
     </script>
-
 </body>
 </html>
