@@ -1,0 +1,1171 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mema Nga - Dashboard Admin & Configuration</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        :root {
+            --primary: #1e293b;
+            --secondary: #d97706;
+            --light: #f8fafc;
+            --dark: #0f172a;
+            --success: #16a34a;
+            --danger: #dc2626;
+            --warning: #ca8a04;
+            --whatsapp: #25d366;
+            --border-radius: 10px;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f1f5f9;
+            color: var(--dark);
+            line-height: 1.5;
+        }
+
+        /* LOGIN SCREEN */
+        #loginOverlay {
+            position: fixed;
+            top: 0; left: 0; width: 100vw; height: 100vh;
+            background: linear-gradient(135deg, var(--dark), var(--primary));
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+        }
+
+        .login-card {
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            text-align: center;
+            width: 100%;
+            max-width: 380px;
+        }
+
+        .login-card h2 {
+            margin-bottom: 8px;
+            color: var(--primary);
+            font-size: 1.4rem;
+        }
+
+        .login-card p {
+            font-size: 0.85rem;
+            color: #64748b;
+            margin-bottom: 20px;
+        }
+
+        .input-group-pass {
+            position: relative;
+            margin-bottom: 15px;
+        }
+
+        .input-group-pass input {
+            width: 100%;
+            padding: 12px 40px 12px 12px;
+            border: 1px solid #cbd5e1;
+            border-radius: 8px;
+            font-size: 0.95rem;
+            text-align: center;
+            outline: none;
+        }
+
+        .input-group-pass i {
+            position: absolute;
+            right: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            cursor: pointer;
+            color: #64748b;
+        }
+
+        .login-card button {
+            width: 100%;
+            padding: 12px;
+            background: var(--secondary);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 0.95rem;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .login-card button:hover { background: #b45309; }
+        .login-error { color: var(--danger); font-size: 0.8rem; margin-top: 10px; display: none; }
+
+        /* HEADER */
+        header {
+            background: var(--primary);
+            color: white;
+            padding: 15px 4%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 1.2rem;
+            font-weight: 700;
+        }
+
+        .brand img {
+            width: 38px; height: 38px;
+            border-radius: 50%;
+            border: 2px solid var(--secondary);
+            object-fit: cover;
+        }
+
+        .brand span { color: var(--secondary); }
+
+        .container {
+            padding: 25px 4%;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        /* NAVIGATION PAR ONGLETS */
+        .admin-nav {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            border-bottom: 2px solid #cbd5e1;
+            padding-bottom: 10px;
+        }
+
+        .tab-btn {
+            padding: 10px 18px;
+            background: #e2e8f0;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            color: var(--primary);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.2s;
+        }
+
+        .tab-btn.active {
+            background: var(--secondary);
+            color: white;
+        }
+
+        .tab-content { display: none; }
+        .tab-content.active { display: block; }
+
+        /* CARTES DE STATISTIQUES */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+
+        .stat-card {
+            background: white;
+            padding: 18px;
+            border-radius: var(--border-radius);
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .stat-card div h3 {
+            font-size: 0.8rem;
+            color: #64748b;
+            text-transform: uppercase;
+        }
+
+        .stat-card div p {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--primary);
+        }
+
+        .stat-card i {
+            font-size: 1.8rem;
+            color: var(--secondary);
+        }
+
+        /* CONTROLES, FILTRES ET RECHERCHE */
+        .controls-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin-bottom: 20px;
+            background: white;
+            padding: 15px;
+            border-radius: var(--border-radius);
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+        }
+
+        .filter-group {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .select-filter {
+            padding: 8px 12px;
+            border: 1px solid #cbd5e1;
+            border-radius: 6px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            outline: none;
+            background: #f8fafc;
+            color: var(--primary);
+        }
+
+        .search-box {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background: #f8fafc;
+            border: 1px solid #cbd5e1;
+            padding: 8px 12px;
+            border-radius: 6px;
+            flex-grow: 1;
+            max-width: 300px;
+        }
+
+        .search-box input {
+            border: none;
+            background: transparent;
+            outline: none;
+            width: 100%;
+            font-size: 0.9rem;
+        }
+
+        .btn-group { display: flex; gap: 10px; flex-wrap: wrap; }
+
+        .btn {
+            padding: 9px 14px;
+            border: none;
+            border-radius: 6px;
+            font-weight: 600;
+            font-size: 0.85rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            transition: all 0.2s;
+            text-decoration: none;
+        }
+
+        .btn:hover { opacity: 0.9; }
+        .btn-primary { background: var(--primary); color: white; }
+        .btn-danger { background: var(--danger); color: white; }
+        .btn-secondary { background: var(--secondary); color: white; }
+        .btn-success { background: var(--success); color: white; }
+        .btn-whatsapp { background: var(--whatsapp); color: white; }
+        .btn-email { background: #0284c7; color: white; }
+
+        /* TABLEAU */
+        .table-responsive {
+            background: white;
+            border-radius: var(--border-radius);
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            text-align: left;
+            font-size: 0.85rem;
+        }
+
+        th, td {
+            padding: 12px 14px;
+            border-bottom: 1px solid #e2e8f0;
+            vertical-align: middle;
+        }
+
+        th {
+            background-color: #f8fafc;
+            color: #475569;
+            font-weight: 600;
+            white-space: nowrap;
+        }
+
+        tr:hover { background-color: #f8fafc; }
+
+        /* BADGES STATUT */
+        .status-select {
+            padding: 5px 8px;
+            border-radius: 6px;
+            border: 1px solid #cbd5e1;
+            font-size: 0.8rem;
+            font-weight: 600;
+            outline: none;
+            cursor: pointer;
+        }
+
+        .status-select.attente { background: #fef3c7; color: #b45309; border-color: #fde68a; }
+        .status-select.encours { background: #dbeafe; color: #1e40af; border-color: #bfdbfe; }
+        .status-select.livre { background: #dcfce7; color: #15803d; border-color: #bbf7d0; }
+        .status-select.annule { background: #fee2e2; color: #b91c1c; border-color: #fecaca; }
+
+        .action-btns { display: flex; gap: 6px; align-items: center; }
+
+        .btn-icon {
+            width: 32px; height: 32px;
+            border-radius: 6px;
+            border: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            color: white;
+            font-size: 0.85rem;
+            text-decoration: none;
+        }
+
+        /* SECTION CONFIGURATION */
+        .config-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 20px;
+        }
+
+        .config-card {
+            background: white;
+            padding: 22px;
+            border-radius: var(--border-radius);
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+        }
+
+        .config-card.full-width {
+            grid-column: 1 / -1;
+        }
+
+        .config-card h3 {
+            font-size: 1.1rem;
+            color: var(--primary);
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            border-bottom: 1px solid #e2e8f0;
+            padding-bottom: 8px;
+        }
+
+        .form-group-config {
+            margin-bottom: 12px;
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+
+        .form-group-config label {
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: #475569;
+        }
+
+        .form-group-config input, .form-group-config select {
+            padding: 9px 12px;
+            border: 1px solid #cbd5e1;
+            border-radius: 6px;
+            font-size: 0.9rem;
+            outline: none;
+        }
+
+        /* SPONSORS & PARTENAIRES GRID */
+        .partners-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+            gap: 15px;
+            margin-top: 15px;
+        }
+
+        .partner-item {
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            padding: 12px;
+            text-align: center;
+            position: relative;
+        }
+
+        .partner-item img {
+            max-width: 100%;
+            height: 60px;
+            object-fit: contain;
+            margin-bottom: 8px;
+        }
+
+        .partner-item h5 {
+            font-size: 0.85rem;
+            color: var(--primary);
+            margin-bottom: 4px;
+        }
+
+        .partner-item a {
+            font-size: 0.75rem;
+            color: #0284c7;
+            text-decoration: none;
+            word-break: break-all;
+        }
+
+        .partner-item .btn-delete-partner {
+            position: absolute;
+            top: 5px; right: 5px;
+            background: var(--danger);
+            color: white;
+            border: none;
+            width: 22px; height: 22px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 0.75rem;
+            display: flex; align-items: center; justify-content: center;
+        }
+
+        /* MODAL */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.5);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .modal-content {
+            background: white;
+            border-radius: var(--border-radius);
+            max-width: 600px;
+            width: 100%;
+            padding: 25px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid #e2e8f0;
+            padding-bottom: 12px;
+            margin-bottom: 15px;
+        }
+
+        .close-modal { background: none; border: none; font-size: 1.4rem; cursor: pointer; color: #64748b; }
+
+        .detail-row {
+            display: flex;
+            margin-bottom: 10px;
+            border-bottom: 1px dashed #f1f5f9;
+            padding-bottom: 8px;
+        }
+
+        .detail-label { font-weight: 600; width: 35%; color: #475569; font-size: 0.85rem; }
+        .detail-value { width: 65%; font-size: 0.9rem; color: var(--dark); }
+
+        .empty-state { text-align: center; padding: 40px; color: #64748b; }
+    </style>
+</head>
+<body>
+
+    <!-- OVERLAY DE CONNEXION SÉCURISÉ -->
+    <div id="loginOverlay">
+        <div class="login-card">
+            <h2><i class="fas fa-lock" style="color: var(--secondary);"></i> Accès Administration</h2>
+            <p>Veuillez entrer votre code d'accès pour continuer.</p>
+            <div class="input-group-pass">
+                <input type="password" id="passInput" placeholder="Code d'accès" onkeypress="if(event.key==='Enter') verifierCode()">
+                <i class="fas fa-eye" id="togglePass" onclick="togglePasswordVisibility()"></i>
+            </div>
+            <button onclick="verifierCode()"><i class="fas fa-key"></i> Se Connecter</button>
+            <div class="login-error" id="loginError"><i class="fas fa-exclamation-circle"></i> Code d'accès incorrect !</div>
+        </div>
+    </div>
+
+    <!-- HEADER PRINCIPAL -->
+    <header>
+        <div class="brand">
+            <img id="adminLogoImg" src="LOGOM1.png" alt="Logo" onerror="this.src='https://via.placeholder.com/40'">
+            <div>Mema <span>Nga</span> - Admin Dashboard</div>
+        </div>
+        <div>
+            <button class="btn btn-danger" style="padding: 5px 10px; font-size: 0.8rem;" onclick="deconnexion()"><i class="fas fa-sign-out-alt"></i> Déconnexion</button>
+        </div>
+    </header>
+
+    <div class="container">
+
+        <!-- NAVIGATION PAR ONGLETS -->
+        <div class="admin-nav">
+            <button class="tab-btn active" onclick="ouvrirOnglet('tabBase')"><i class="fas fa-database"></i> Base de Données</button>
+            <button class="tab-btn" onclick="ouvrirOnglet('tabConfig')"><i class="fas fa-sliders-h"></i> Configuration & Paramètres</button>
+        </div>
+
+        <!-- ONGLET 1 : BASE DE DONNÉES & COMMANDES -->
+        <div id="tabBase" class="tab-content active">
+
+            <!-- STATISTIQUES -->
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div>
+                        <h3>Total Affiché</h3>
+                        <p id="statTotal">0</p>
+                    </div>
+                    <i class="fas fa-list-check"></i>
+                </div>
+                <div class="stat-card">
+                    <div>
+                        <h3>En Attente</h3>
+                        <p id="statAttente">0</p>
+                    </div>
+                    <i class="fas fa-clock" style="color: var(--warning);"></i>
+                </div>
+                <div class="stat-card">
+                    <div>
+                        <h3>En Cours</h3>
+                        <p id="statEnCours">0</p>
+                    </div>
+                    <i class="fas fa-truck" style="color: #2563eb;"></i>
+                </div>
+                <div class="stat-card">
+                    <div>
+                        <h3>Validées / Livrées</h3>
+                        <p id="statLivre">0</p>
+                    </div>
+                    <i class="fas fa-check-circle" style="color: var(--success);"></i>
+                </div>
+            </div>
+
+            <!-- BARRE DE RECHERCHE, FILTRES TEMPORELS ET TÉLÉCHARGEMENT -->
+            <div class="controls-bar">
+                <div class="filter-group">
+                    <label for="periodeFilter" style="font-size:0.85rem; font-weight:600; color:#475569;"><i class="fas fa-filter"></i> Période :</label>
+                    <select id="periodeFilter" class="select-filter" onchange="chargerDonnees()">
+                        <option value="tout">Toutes les dates</option>
+                        <option value="mois_actuel">Mois en cours</option>
+                        <option value="t1">1er Trimestre (Jan - Mar)</option>
+                        <option value="t2">2ème Trimestre (Avr - Juin)</option>
+                        <option value="t3">3ème Trimestre (Juil - Sept)</option>
+                        <option value="s1">1er Semestre (Jan - Juin)</option>
+                        <option value="s2">2ème Semestre (Juil - Déc)</option>
+                        <option value="annuel">Année en cours (2026)</option>
+                    </select>
+                </div>
+
+                <div class="search-box">
+                    <i class="fas fa-search" style="color: #94a3b8;"></i>
+                    <input type="text" id="searchInput" onkeyup="filtrerDonnees()" placeholder="Rechercher (Nom, Tel, ID)...">
+                </div>
+
+                <div class="btn-group">
+                    <button class="btn btn-success" onclick="exporterCSV()"><i class="fas fa-file-download"></i> Télécharger CSV</button>
+                    <button class="btn btn-primary" onclick="chargerDonnees()"><i class="fas fa-sync-alt"></i> Actualiser</button>
+                    <button class="btn btn-danger" onclick="viderBaseDeDonnees()"><i class="fas fa-trash"></i> Vider Tout</button>
+                </div>
+            </div>
+
+            <!-- TABLEAU DES COMMANDES -->
+            <div class="table-responsive">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Code ID</th>
+                            <th>Date</th>
+                            <th>Client</th>
+                            <th>Zone / Tarif</th>
+                            <th>Service</th>
+                            <th>Paiement</th>
+                            <th>Statut</th>
+                            <th>Contact (WhatsApp / Email)</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tableBody">
+                        <!-- Données générées ici -->
+                    </tbody>
+                </table>
+                <div id="emptyMessage" class="empty-state" style="display: none;">
+                    <i class="fas fa-inbox fa-3x" style="margin-bottom: 10px;"></i>
+                    <p>Aucune commande trouvée pour la période sélectionnée.</p>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- ONGLET 2 : CONFIGURATION & MODIFICATION SITE -->
+        <div id="tabConfig" class="tab-content">
+            <div class="config-grid">
+                
+                <!-- CARTE CODE D'ACCÈS -->
+                <div class="config-card">
+                    <h3><i class="fas fa-user-shield" style="color: var(--secondary);"></i> Modification du Code d'Accès</h3>
+                    <div class="form-group-config">
+                        <label>Nouveau Code d'Accès Admin</label>
+                        <input type="password" id="newPassInput" placeholder="Entrer un nouveau mot de passe">
+                    </div>
+                    <button class="btn btn-primary" style="width: 100%; margin-top: 10px;" onclick="modifierCodeAcces()"><i class="fas fa-key"></i> Mettre à jour le Code</button>
+                </div>
+
+                <!-- CARTE LOGO SITE -->
+                <div class="config-card">
+                    <h3><i class="fas fa-image" style="color: var(--secondary);"></i> Modification du Logo</h3>
+                    <div class="form-group-config">
+                        <label>Image de Logo Actuelle</label>
+                        <div style="text-align: center; margin: 10px 0;">
+                            <img id="previewLogoConfig" src="LOGOM1.png" style="width: 80px; height: 80px; border-radius: 50%; border: 2px solid var(--secondary); object-fit: cover;">
+                        </div>
+                    </div>
+                    <div class="form-group-config">
+                        <label>Téléverser un nouveau logo</label>
+                        <input type="file" accept="image/*" onchange="changerLogoFile(event)">
+                    </div>
+                    <div class="form-group-config">
+                        <label>Ou saisir l'URL de l'image</label>
+                        <input type="text" id="logoUrlInput" placeholder="https://exemple.com/logo.png">
+                    </div>
+                    <button class="btn btn-primary" style="width: 100%; margin-top: 10px;" onclick="sauvegarderLogoUrl()"><i class="fas fa-save"></i> Enregistrer le Logo</button>
+                </div>
+
+                <!-- CARTE TARIFS ET ZONES -->
+                <div class="config-card">
+                    <h3><i class="fas fa-tags" style="color: var(--secondary);"></i> Modification des Prix & Tarifs</h3>
+                    <div class="form-group-config">
+                        <label>Prix ZONE A ($)</label>
+                        <input type="number" id="prixZoneA" value="10">
+                    </div>
+                    <div class="form-group-config">
+                        <label>Prix ZONE B ($)</label>
+                        <input type="number" id="prixZoneB" value="12">
+                    </div>
+                    <div class="form-group-config">
+                        <label>Prix ZONE C ($)</label>
+                        <input type="number" id="prixZoneC" value="15">
+                    </div>
+                    <div class="form-group-config">
+                        <label>Poids Standard Maximal (kg)</label>
+                        <input type="text" id="poidsMax" value="1.5">
+                    </div>
+                    <button class="btn btn-secondary" style="width: 100%; margin-top: 10px;" onclick="sauvegarderTarifs()"><i class="fas fa-save"></i> Enregistrer les Prix</button>
+                </div>
+
+                <!-- CARTE SPONSORS ET PARTENAIRES -->
+                <div class="config-card full-width">
+                    <h3><i class="fas fa-handshake" style="color: var(--secondary);"></i> Gestion des Sponsors & Partenaires</h3>
+                    
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 12px; background: #f8fafc; padding: 15px; border-radius: 8px; border: 1px solid #e2e8f0;">
+                        <div class="form-group-config">
+                            <label>Nom du Partenaire / Sponsor</label>
+                            <input type="text" id="partnerName" placeholder="Ex: Rawbank, Vodacom...">
+                        </div>
+                        <div class="form-group-config">
+                            <label>URL du Logo du Partenaire</label>
+                            <input type="text" id="partnerLogoUrl" placeholder="https://exemple.com/logo-partenaire.png">
+                        </div>
+                        <div class="form-group-config">
+                            <label>Ou Charger l'image du Logo</label>
+                            <input type="file" id="partnerLogoFile" accept="image/*">
+                        </div>
+                        <div class="form-group-config">
+                            <label>Lien Web (Optionnel)</label>
+                            <input type="text" id="partnerLink" placeholder="https://www.partenaire.com">
+                        </div>
+                    </div>
+                    <button class="btn btn-success" style="margin-top: 12px;" onclick="ajouterPartenaire()"><i class="fas fa-plus-circle"></i> Ajouter ce Partenaire</button>
+
+                    <h4 style="margin-top: 20px; font-size: 0.95rem; color: var(--primary);"><i class="fas fa-list"></i> Liste des Sponsors & Partenaires Actifs</h4>
+                    <div class="partners-grid" id="partnersContainer">
+                        <!-- Partenaires ajoutés dynamiquement -->
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+
+    <!-- MODAL DE VISUALISATION DÉTAILLÉE -->
+    <div class="modal" id="detailsModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2><i class="fas fa-file-invoice" style="color: var(--secondary);"></i> Fiche Détaillée Commande</h2>
+                <button class="close-modal" onclick="fermerModal()">&times;</button>
+            </div>
+            <div id="modalBody"></div>
+        </div>
+    </div>
+
+    <script>
+        const EMAIL_ADMIN = "contact@mema-nga.com";
+        let fichesFiltreesCourantes = [];
+
+        // GESTION DU CODE D'ACCÈS DYNAMIQUE
+        function getCodeAcces() {
+            return localStorage.getItem('memaAdminPass') || "admin123";
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            if (sessionStorage.getItem('memaAdminAuth') === 'true') {
+                document.getElementById('loginOverlay').style.display = 'none';
+                initBaseDeDonnees();
+            }
+        });
+
+        function togglePasswordVisibility() {
+            const input = document.getElementById('passInput');
+            const icon = document.getElementById('togglePass');
+            if (input.type === 'password') {
+                input.type = 'text';
+                icon.classList.replace('fa-eye', 'fa-eye-slash');
+            } else {
+                input.type = 'password';
+                icon.classList.replace('fa-eye-slash', 'fa-eye');
+            }
+        }
+
+        function verifierCode() {
+            const saisie = document.getElementById('passInput').value;
+            if (saisie === getCodeAcces()) {
+                sessionStorage.setItem('memaAdminAuth', 'true');
+                document.getElementById('loginOverlay').style.display = 'none';
+                initBaseDeDonnees();
+            } else {
+                document.getElementById('loginError').style.display = 'block';
+            }
+        }
+
+        function modifierCodeAcces() {
+            const newPass = document.getElementById('newPassInput').value.trim();
+            if (newPass.length < 4) {
+                alert("Le code d'accès doit contenir au moins 4 caractères.");
+                return;
+            }
+            localStorage.setItem('memaAdminPass', newPass);
+            alert("Code d'accès mis à jour avec succès !");
+            document.getElementById('newPassInput').value = '';
+        }
+
+        function deconnexion() {
+            sessionStorage.removeItem('memaAdminAuth');
+            location.reload();
+        }
+
+        function ouvrirOnglet(tabId) {
+            document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
+            document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active'));
+            document.getElementById(tabId).classList.add('active');
+            event.currentTarget.classList.add('active');
+        }
+
+        // INITIALISATION DE LA BASE DE DONNÉES ET PARTENAIRES
+        function initBaseDeDonnees() {
+            let fiches = JSON.parse(localStorage.getItem('memaNgaFiches')) || [];
+            if (fiches.length === 0) {
+                fiches = generer20ClientsValides();
+                localStorage.setItem('memaNgaFiches', JSON.stringify(fiches));
+            }
+
+            let partenaires = JSON.parse(localStorage.getItem('memaNgaPartners')) || [];
+            if (partenaires.length === 0) {
+                partenaires = genererPartenairesParDefaut();
+                localStorage.setItem('memaNgaPartners', JSON.stringify(partenaires));
+            }
+
+            chargerDonnees();
+            chargerParametresConfig();
+            afficherPartenaires();
+        }
+
+        // SPONSORS & PARTENAIRES PAR DÉFAUT
+        function genererPartenairesParDefaut() {
+            return [
+                { id: "p1", name: "Vodacom RDC", logo: "https://via.placeholder.com/150x60?text=Vodacom", link: "https://vodacom.cd" },
+                { id: "p2", name: "Airtel Money", logo: "https://via.placeholder.com/150x60?text=Airtel", link: "https://airtel.cd" },
+                { id: "p3", name: "Orange RDC", logo: "https://via.placeholder.com/150x60?text=Orange", link: "https://orange.cd" }
+            ];
+        }
+
+        // GESTION DES PARTENAIRES
+        function afficherPartenaires() {
+            const partenaires = JSON.parse(localStorage.getItem('memaNgaPartners')) || [];
+            const container = document.getElementById('partnersContainer');
+            container.innerHTML = '';
+
+            if (partenaires.length === 0) {
+                container.innerHTML = `<p style="grid-column: 1/-1; color: #64748b; font-size: 0.85rem;">Aucun partenaire configuré.</p>`;
+                return;
+            }
+
+            partenaires.forEach((p, idx) => {
+                const card = document.createElement('div');
+                card.className = 'partner-item';
+                card.innerHTML = `
+                    <button class="btn-delete-partner" onclick="supprimerPartenaire(${idx})" title="Supprimer"><i class="fas fa-times"></i></button>
+                    <img src="${p.logo}" alt="${p.name}" onerror="this.src='https://via.placeholder.com/150x60?text=Logo'">
+                    <h5>${p.name}</h5>
+                    ${p.link ? `<a href="${p.link}" target="_blank">${p.link}</a>` : ''}
+                `;
+                container.appendChild(card);
+            });
+        }
+
+        function ajouterPartenaire() {
+            const name = document.getElementById('partnerName').value.trim();
+            const logoUrl = document.getElementById('partnerLogoUrl').value.trim();
+            const logoFile = document.getElementById('partnerLogoFile').files[0];
+            const link = document.getElementById('partnerLink').value.trim();
+
+            if (!name) {
+                alert("Veuillez indiquer au moins le nom du partenaire.");
+                return;
+            }
+
+            const enregistrer = (logoFinal) => {
+                let partenaires = JSON.parse(localStorage.getItem('memaNgaPartners')) || [];
+                partenaires.push({
+                    id: "p_" + Date.now(),
+                    name: name,
+                    logo: logoFinal || "https://via.placeholder.com/150x60?text=" + encodeURIComponent(name),
+                    link: link
+                });
+                localStorage.setItem('memaNgaPartners', JSON.stringify(partenaires));
+                afficherPartenaires();
+                
+                // Reset inputs
+                document.getElementById('partnerName').value = '';
+                document.getElementById('partnerLogoUrl').value = '';
+                document.getElementById('partnerLogoFile').value = '';
+                document.getElementById('partnerLink').value = '';
+                alert("Partenaire ajouté avec succès !");
+            };
+
+            if (logoFile) {
+                const reader = new FileReader();
+                reader.onload = (e) => enregistrer(e.target.result);
+                reader.readAsDataURL(logoFile);
+            } else {
+                enregistrer(logoUrl);
+            }
+        }
+
+        function supprimerPartenaire(index) {
+            if (confirm("Voulez-vous supprimer ce partenaire ?")) {
+                let partenaires = JSON.parse(localStorage.getItem('memaNgaPartners')) || [];
+                partenaires.splice(index, 1);
+                localStorage.setItem('memaNgaPartners', JSON.stringify(partenaires));
+                afficherPartenaires();
+            }
+        }
+
+        // GENERATION DES CLIENTS VALIDÉS PAR DÉFAUT
+        function generer20ClientsValides() {
+            return [
+                { id: "M101KA", nom: "Chantal Mulamba", tel: "+243812345678", email: "chantal.m@gmail.com", zone: "ZONE A (10 $)", service: "Déposer un colis (Dépôt)", adresse: "De: Gombe -> À: Kalamu", colis: "Documents juridiques", paiement: "M-Pesa", date: "2026-03-30 08:30", statut: "Livré", notes: "Validé par l'administration" },
+                { id: "M102BK", nom: "Dieudonné Kabeya", tel: "+243890123456", email: "dkabeya@yahoo.fr", zone: "ZONE B (12 $)", service: "Récupérer un colis (Retrait)", adresse: "De: Limete -> À: Ngaliema", colis: "Carton d'échantillons", paiement: "Orange Money", date: "2026-03-30 09:15", statut: "Livré", notes: "Validé par l'administration" },
+                { id: "M103PT", nom: "Grâce Tshilombo", tel: "+243998765432", email: "grace.t@hotmail.com", zone: "ZONE A (10 $)", service: "Faire une course / démarche", adresse: "De: Lingwala -> À: Kasa-Vubu", colis: "Achat de médicaments", paiement: "Airtel Money", date: "2026-02-15 09:45", statut: "Livré", notes: "Validé par l'administration" },
+                { id: "M104LP", nom: "Patrick Mbemba", tel: "+243823456789", email: "patrick.m@office.cd", zone: "ZONE C (15 $)", service: "Déposer un colis (Dépôt)", adresse: "De: Kintambo -> À: Masina", colis: "Pièces de rechange auto", paiement: "Espèces", date: "2026-01-10 10:00", statut: "Livré", notes: "Validé par l'administration" },
+                { id: "M105AZ", nom: "Aline Zola", tel: "+243811223344", email: "aline.zola@gmail.com", zone: "ZONE A (10 $)", service: "Récupérer un colis (Retrait)", adresse: "De: Barumbu -> À: Bandalungwa", colis: "Sac de vêtements", paiement: "M-Pesa", date: "2026-04-05 10:20", statut: "Livré", notes: "Validé par l'administration" },
+                { id: "M106XY", nom: "Serge Ngalula", tel: "+243855667788", email: "serge.n@gmail.com", zone: "ZONE B (12 $)", service: "Déposer un colis (Dépôt)", adresse: "De: Lemba -> À: Matete", colis: "Ordinateur portable", paiement: "UBA / Carte", date: "2026-05-12 11:00", statut: "Livré", notes: "Validé par l'administration" },
+                { id: "M107RT", nom: "Béatrice Bwala", tel: "+243900112233", email: "b.bwala@yahoo.cd", zone: "ZONE C (15 $)", service: "Faire une course / démarche", adresse: "De: Mont-Ngafula -> À: Gombe", colis: "Dépôt dossier administratif", paiement: "M-Pesa", date: "2026-06-20 11:30", statut: "Livré", notes: "Validé par l'administration" },
+                { id: "M108LK", nom: "Christian Lelo", tel: "+243819988776", email: "clelo@tech.cd", zone: "ZONE A (10 $)", service: "Récupérer un colis (Retrait)", adresse: "De: Commune Kinshasa -> À: Ngiri-Ngiri", colis: "Téléphone réparé", paiement: "Orange Money", date: "2026-07-02 12:00", statut: "Livré", notes: "Validé par l'administration" },
+                { id: "M109QW", nom: "Mireille Mbuyi", tel: "+243891122334", email: "mireille.m@gmail.com", zone: "ZONE B (12 $)", service: "Déposer un colis (Dépôt)", adresse: "De: Selembao -> À: Makala", colis: "Colis alimentaire", paiement: "Espèces", date: "2026-08-14 12:40", statut: "Livré", notes: "Validé par l'administration" },
+                { id: "M110OP", nom: "Junior Kalala", tel: "+243993344556", email: "jkalala@gmail.com", zone: "ZONE B (12 $)", service: "Récupérer un colis (Retrait)", adresse: "De: N'Djili -> À: Bumbu", colis: "Chaussures", paiement: "Airtel Money", date: "2026-09-01 13:10", statut: "Livré", notes: "Validé par l'administration" },
+                { id: "M111MN", nom: "Naomie Kanyinda", tel: "+243828877665", email: "nkanyinda@yahoo.fr", zone: "ZONE A (10 $)", service: "Déposer un colis (Dépôt)", adresse: "De: Bandalungwa -> À: Gombe", colis: "Gâteau d'anniversaire", paiement: "M-Pesa", date: "2026-09-15 13:30", statut: "Livré", notes: "Validé par l'administration" },
+                { id: "M112VB", nom: "Franck Lukoki", tel: "+243814455667", email: "flukoki@gmail.com", zone: "ZONE C (15 $)", service: "Faire une course / démarche", adresse: "De: Kimbanseke -> À: N'Sele", colis: "Documents de propriété", paiement: "Orange Money", date: "2026-09-20 14:00", statut: "Livré", notes: "Validé par l'administration" },
+                { id: "M113CX", nom: "Dorcas Masengu", tel: "+243896677889", email: "dorcas.m@gmail.com", zone: "ZONE A (10 $)", service: "Récupérer un colis (Retrait)", adresse: "De: Kalamu -> À: Lingwala", colis: "Cosmétiques", paiement: "M-Pesa", date: "2026-09-22 14:20", statut: "Livré", notes: "Validé par l'administration" },
+                { id: "M114DS", nom: "Thierry Mukendi", tel: "+243991133557", email: "tmukendi@gmail.com", zone: "ZONE B (12 $)", service: "Déposer un colis (Dépôt)", adresse: "De: Ngaba -> À: Lemba", colis: "Fournitures scolaires", paiement: "Espèces", date: "2026-09-25 14:50", statut: "Livré", notes: "Validé par l'administration" },
+                { id: "M115EW", nom: "Ruth Botembe", tel: "+243822244668", email: "r.botembe@outlook.com", zone: "ZONE C (15 $)", service: "Déposer un colis (Dépôt)", adresse: "De: Maluku -> À: Gombe", colis: "Échantillons d'artisanat", paiement: "UBA / Carte", date: "2026-09-26 15:10", statut: "Livré", notes: "Validé par l'administration" },
+                { id: "M116FG", nom: "Hervé Yamba", tel: "+243813355779", email: "hyamba@gmail.com", zone: "ZONE A (10 $)", service: "Faire une course / démarche", adresse: "De: Kasa-Vubu -> À: Barumbu", colis: "Achat médicaments urgents", paiement: "M-Pesa", date: "2026-09-27 15:30", statut: "Livré", notes: "Validé par l'administration" },
+                { id: "M117HJ", nom: "Gisèle Yala", tel: "+243894466880", email: "gyala@yahoo.fr", zone: "ZONE B (12 $)", service: "Récupérer un colis (Retrait)", adresse: "De: Matete -> À: Limete", colis: "Accessoires mode", paiement: "Orange Money", date: "2026-09-28 16:00", statut: "Livré", notes: "Validé par l'administration" },
+                { id: "M118KL", nom: "Joel Tshimanga", tel: "+243995577990", email: "jtshimanga@gmail.com", zone: "ZONE A (10 $)", service: "Déposer un colis (Dépôt)", adresse: "De: Ngiri-Ngiri -> À: Bandalungwa", colis: "Clef USB & Documents", paiement: "Airtel Money", date: "2026-09-29 16:20", statut: "Livré", notes: "Validé par l'administration" },
+                { id: "M119ZX", nom: "Carine Nzuzi", tel: "+243826688001", email: "cnzuzi@gmail.com", zone: "ZONE C (15 $)", service: "Faire une course / démarche", adresse: "De: Kisenso -> À: Lemba", colis: "Paiement de facture", paiement: "Espèces", date: "2026-09-30 16:45", statut: "Livré", notes: "Validé par l'administration" },
+                { id: "M120CV", nom: "Alain Kabasele", tel: "+243817799112", email: "akabasele@gmail.com", zone: "ZONE B (12 $)", service: "Récupérer un colis (Retrait)", adresse: "De: Ngaliema -> À: Kintambo", colis: "Panneau solaire léger", paiement: "M-Pesa", date: "2026-09-30 17:15", statut: "Livré", notes: "Validé par l'administration" }
+            ];
+        }
+
+        // FILTRAGE ET AFFICHAGE DES DONNÉES
+        function chargerDonnees() {
+            const fichesToutes = JSON.parse(localStorage.getItem('memaNgaFiches')) || [];
+            const filtrePeriode = document.getElementById('periodeFilter').value;
+            const tbody = document.getElementById('tableBody');
+            const emptyMessage = document.getElementById('emptyMessage');
+
+            fichesFiltreesCourantes = fichesToutes.filter(fiche => filtrerParDate(fiche.date, filtrePeriode));
+            
+            tbody.innerHTML = '';
+
+            if (fichesFiltreesCourantes.length === 0) {
+                emptyMessage.style.display = 'block';
+                mettreAJourStats([]);
+                return;
+            }
+
+            emptyMessage.style.display = 'none';
+
+            fichesFiltreesCourantes.forEach((fiche) => {
+                const tr = document.createElement('tr');
+                const cleanPhone = fiche.tel.replace(/[^0-9]/g, '');
+                const msgWhatsapp = encodeURIComponent(`Bonjour ${fiche.nom},\nConcerne votre commande Mema Nga *#${fiche.id}* (${fiche.service}).\nInformation validée.`);
+                
+                const clientEmail = fiche.email || 'client@mema-nga.com';
+                const emailSujet = encodeURIComponent(`[Mema Nga] Confirmation Commande #${fiche.id} - ${fiche.nom}`);
+                const emailCorps = encodeURIComponent(`Bonjour ${fiche.nom},\n\nVoici les détails complets de votre commande auprès de Mema Nga :\n\n- Code Commande : #${fiche.id}\n- Service : ${fiche.service}\n- Zone / Tarif : ${fiche.zone}\n- Itinéraire : ${fiche.adresse}\n- Colis : ${fiche.colis}\n- Mode de Paiement : ${fiche.paiement}\n- Statut : ${fiche.statut}\n\nL'équipe Mema Nga vous remercie !\nEmail: ${EMAIL_ADMIN}`);
+                const mailtoLink = `mailto:${clientEmail}?cc=${EMAIL_ADMIN}&subject=${emailSujet}&body=${emailCorps}`;
+
+                const statusClass = getStatusClass(fiche.statut);
+
+                tr.innerHTML = `
+                    <td><strong>#${fiche.id}</strong></td>
+                    <td><small>${fiche.date}</small></td>
+                    <td><strong>${fiche.nom}</strong><br><small style="color:#64748b">${fiche.tel}</small></td>
+                    <td><span class="badge" style="background:#e2e8f0; color:#334155; padding: 3px 6px; border-radius: 4px;">${fiche.zone}</span></td>
+                    <td>${fiche.service}</td>
+                    <td><strong>${fiche.paiement}</strong></td>
+                    <td>
+                        <select class="status-select ${statusClass}" onchange="changerStatut('${fiche.id}', this)">
+                            <option value="En attente" ${fiche.statut === 'En attente' ? 'selected' : ''}>En attente</option>
+                            <option value="En cours" ${fiche.statut === 'En cours' ? 'selected' : ''}>En cours</option>
+                            <option value="Livré" ${fiche.statut === 'Livré' ? 'selected' : ''}>Livré (Validé)</option>
+                            <option value="Annulé" ${fiche.statut === 'Annulé' ? 'selected' : ''}>Annulé</option>
+                        </select>
+                    </td>
+                    <td>
+                        <div class="action-btns">
+                            <a href="https://wa.me/${cleanPhone}?text=${msgWhatsapp}" target="_blank" class="btn-icon btn-whatsapp" title="Envoyer WhatsApp">
+                                <i class="fab fa-whatsapp"></i>
+                            </a>
+                            <a href="${mailtoLink}" class="btn-icon btn-email" title="Envoyer Email via contact@mema-nga.com">
+                                <i class="fas fa-envelope"></i>
+                            </a>
+                        </div>
+                    </td>
+                    <td>
+                        <div class="action-btns">
+                            <button class="btn-icon btn-secondary" onclick="afficherDetailsParId('${fiche.id}')" title="Voir détails">
+                                <i class="fas fa-eye"></i>
+                            </button>
+                            <button class="btn-icon btn-danger" onclick="supprimerCommandeParId('${fiche.id}')" title="Supprimer">
+                                <i class="fas fa-trash-alt"></i>
+                            </button>
+                        </div>
+                    </td>
+                `;
+
+                tbody.appendChild(tr);
+            });
+
+            mettreAJourStats(fichesFiltreesCourantes);
+        }
+
+        function filtrerParDate(dateStr, filtre) {
+            if (filtre === 'tout') return true;
+
+            const dateObj = new Date(dateStr);
+            if (isNaN(dateObj)) return true;
+
+            const mois = dateObj.getMonth();
+            const annee = dateObj.getFullYear();
+            const maint = new Date();
+
+            switch (filtre) {
+                case 'mois_actuel': return mois === maint.getMonth() && annee === maint.getFullYear();
+                case 't1': return mois >= 0 && mois <= 2;
+                case 't2': return mois >= 3 && mois <= 5;
+                case 't3': return mois >= 6 && mois <= 8;
+                case 's1': return mois >= 0 && mois <= 5;
+                case 's2': return mois >= 6 && mois <= 11;
+                case 'annuel': return annee === maint.getFullYear();
+                default: return true;
+            }
+        }
+
+        function exporterCSV() {
+            if (fichesFiltreesCourantes.length === 0) {
+                alert("Aucune donnée à exporter pour la période sélectionnée.");
+                return;
+            }
+
+            let csvContent = "\uFEFF";
+            csvContent += "ID;Date;Nom;Telephone;Email;Zone;Service;Itineraire;Colis;Paiement;Statut;Notes\n";
+
+            fichesFiltreesCourantes.forEach(f => {
+                const ligne = [
+                    f.id,
+                    f.date,
+                    `"${f.nom.replace(/"/g, '""')}"`,
+                    `"${f.tel}"`,
+                    `"${f.email || ''}"`,
+                    `"${f.zone}"`,
+                    `"${f.service}"`,
+                    `"${f.adresse.replace(/"/g, '""')}"`,
+                    `"${f.colis.replace(/"/g, '""')}"`,
+                    `"${f.paiement}"`,
+                    `"${f.statut}"`,
+                    `"${(f.notes || '').replace(/"/g, '""')}"`
+                ].join(";");
+                csvContent += ligne + "\n";
+            });
+
+            const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+            const link = document.createElement("a");
+            const url = URL.createObjectURL(blob);
+            const peri = document.getElementById('periodeFilter').value;
+            
+            link.setAttribute("href", url);
+            link.setAttribute("download", `mema_nga_donnees_${peri}_${new Date().toISOString().slice(0,10)}.csv`);
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        }
+
+        function getStatusClass(statut) {
+            switch(statut) {
+                case 'En attente': return 'attente';
+                case 'En cours': return 'encours';
+                case 'Livré': return 'livre';
+                case 'Annulé': return 'annule';
+                default: return 'attente';
+            }
+        }
+
+        function changerStatut(id, selectElement) {
+            let fiches = JSON.parse(localStorage.getItem('memaNgaFiches')) || [];
+            const index = fiches.findIndex(f => f.id === id);
+            if (index !== -1) {
+                fiches[index].statut = selectElement.value;
+                localStorage.setItem('memaNgaFiches', JSON.stringify(fiches));
+                selectElement.className = `status-select ${getStatusClass(selectElement.value)}`;
+                chargerDonnees();
+            }
+        }
+
+        function afficherDetailsParId(id) {
+            const fiches = JSON.parse(localStorage.getItem('memaNgaFiches')) || [];
+            const fiche = fiches.find(f => f.id === id);
+            if (!fiche) return;
+
+            document.getElementById('modalBody').innerHTML = `
+                <div class="detail-row"><div class="detail-label">ID Commande :</div><div class="detail-value"><strong>#${fiche.id}</strong></div></div>
+                <div class="detail-row"><div class="detail-label">Date & Heure :</div><div class="detail-value">${fiche.date}</div></div>
+                <div class="detail-row"><div class="detail-label">Client :</div><div class="detail-value">${fiche.nom}</div></div>
+                <div class="detail-row"><div class="detail-label">Téléphone :</div><div class="detail-value">${fiche.tel}</div></div>
+                <div class="detail-row"><div class="detail-label">Email :</div><div class="detail-value">${fiche.email || 'Non spécifié'}</div></div>
+                <div class="detail-row"><div class="detail-label">Zone / Tarif :</div><div class="detail-value">${fiche.zone}</div></div>
+                <div class="detail-row"><div class="detail-label">Service :</div><div class="detail-value">${fiche.service}</div></div>
+                <div class="detail-row"><div class="detail-label">Itinéraire :</div><div class="detail-value">${fiche.adresse}</div></div>
+                <div class="detail-row"><div class="detail-label">Contenu :</div><div class="detail-value">${fiche.colis}</div></div>
+                <div class="detail-row"><div class="detail-label">Paiement :</div><div class="detail-value"><strong>${fiche.paiement}</strong></div></div>
+                <div class="detail-row"><div class="detail-label">Statut :</div><div class="detail-value"><span class="status-select ${getStatusClass(fiche.statut)}">${fiche.statut}</span></div></div>
+                <div class="detail-row"><div class="detail-label">Instructions :</div><div class="detail-value">${fiche.notes || 'Aucune'}</div></div>
+            `;
+
+            document.getElementById('detailsModal').style.display = 'flex';
+        }
+
+        function fermerModal() { document.getElementById('detailsModal').style.display = 'none'; }
+
+        function supprimerCommandeParId(id) {
+            if (confirm("Supprimer cette commande ?")) {
+                let fiches = JSON.parse(localStorage.getItem('memaNgaFiches')) || [];
+                fiches = fiches.filter(f => f.id !== id);
+                localStorage.setItem('memaNgaFiches', JSON.stringify(fiches));
+                chargerDonnees();
+            }
+        }
+
+        function viderBaseDeDonnees() {
+            if (confirm("Voulez-vous supprimer TOUTES les commandes ?")) {
+                localStorage.removeItem('memaNgaFiches');
+                chargerDonnees();
+            }
+        }
+
+        function filtrerDonnees() {
+            const filtre = document.getElementById('searchInput').value.toLowerCase();
+            document.querySelectorAll('#tableBody tr').forEach(ligne => {
+                ligne.style.display = ligne.textContent.toLowerCase().includes(filtre) ? '' : 'none';
+            });
+        }
+
+        function mettreAJourStats(fiches) {
+            document.getElementById('statTotal').innerText = fiches.length;
+            document.getElementById('statAttente').innerText = fiches.filter(f => f.statut === 'En attente').length;
+            document.getElementById('statEnCours').innerText = fiches.filter(f => f.statut === 'En cours').length;
+            document.getElementById('statLivre').innerText = fiches.filter(f => f.statut === 'Livré').length;
+        }
+
+        function chargerParametresConfig() {
+            const logo = localStorage.getItem('memaNgaLogo') || 'LOGOM1.png';
+            document.getElementById('adminLogoImg').src = logo;
+            document.getElementById('previewLogoConfig').src = logo;
+
+            const tarifs = JSON.parse(localStorage.getItem('memaNgaTarifs')) || { zoneA: 10, zoneB: 12, zoneC: 15, poidsMax: "1.5" };
+            document.getElementById('prixZoneA').value = tarifs.zoneA;
+            document.getElementById('prixZoneB').value = tarifs.zoneB;
+            document.getElementById('prixZoneC').value = tarifs.zoneC;
+            document.getElementById('poidsMax').value = tarifs.poidsMax;
+        }
+
+        function changerLogoFile(event) {
+            const file = event.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    const base64Logo = e.target.result;
+                    localStorage.setItem('memaNgaLogo', base64Logo);
+                    document.getElementById('adminLogoImg').src = base64Logo;
+                    document.getElementById('previewLogoConfig').src = base64Logo;
+                    alert("Logo mis à jour avec succès !");
+                };
+                reader.readAsDataURL(file);
+            }
+        }
+
+        function sauvegarderLogoUrl() {
+            const url = document.getElementById('logoUrlInput').value;
+            if (url) {
+                localStorage.setItem('memaNgaLogo', url);
+                document.getElementById('adminLogoImg').src = url;
+                document.getElementById('previewLogoConfig').src = url;
+                alert("Logo enregistré via URL !");
+            }
+        }
+
+        function sauvegarderTarifs() {
+            const tarifs = {
+                zoneA: document.getElementById('prixZoneA').value,
+                zoneB: document.getElementById('prixZoneB').value,
+                zoneC: document.getElementById('prixZoneC').value,
+                poidsMax: document.getElementById('poidsMax').value
+            };
+            localStorage.setItem('memaNgaTarifs', JSON.stringify(tarifs));
+            alert("Les tarifs ont été mis à jour !");
+        }
+    </script>
+</body>
+</html>
