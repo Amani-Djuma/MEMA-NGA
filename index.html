@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mema Nga - Porte-moi | Service de Livraison & Cours Express à Kinshasa</title>
+    <title>Mema Nga - Porte-moi | Service de Livraison & Courses Express à Kinshasa</title>
     
     <!-- Polices & Icônes Pro -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -441,6 +441,72 @@
             line-height: 1.4;
         }
 
+        /* SECTION TÉMOIGNAGES & CONFIANCE */
+        .testimonials-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+        }
+        .testimonial-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-lg);
+            padding: 26px;
+            box-shadow: var(--shadow-sm);
+            transition: all 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+        .testimonial-card:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-md);
+            border-color: var(--accent);
+        }
+        .testimonial-quote {
+            color: var(--accent);
+            font-size: 1.3rem;
+            margin-bottom: 12px;
+        }
+        .testimonial-text {
+            font-size: 0.9rem;
+            color: var(--text-main);
+            line-height: 1.6;
+            margin-bottom: 20px;
+            font-style: italic;
+        }
+        .testimonial-user {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            border-top: 1px solid var(--border-color);
+            padding-top: 15px;
+        }
+        .testimonial-avatar {
+            width: 42px;
+            height: 42px;
+            border-radius: 50%;
+            background: #fff7ed;
+            color: var(--accent);
+            font-weight: 800;
+            font-size: 0.85rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 2px solid #ffedd5;
+            flex-shrink: 0;
+        }
+        .testimonial-info h5 {
+            font-size: 0.9rem;
+            color: var(--primary);
+            font-weight: 700;
+            line-height: 1.2;
+        }
+        .testimonial-info p {
+            font-size: 0.78rem;
+            color: var(--text-muted);
+        }
+
         /* SECTION PARTENAIRES RESPONSIVE */
         .partners-section {
             background: var(--card-bg);
@@ -529,6 +595,14 @@
             background: #fff;
             color: var(--primary);
             width: 100%;
+        }
+
+        .form-group input:read-only {
+            background-color: #f1f5f9;
+            font-weight: 800;
+            color: var(--accent);
+            letter-spacing: 0.5px;
+            cursor: not-allowed;
         }
 
         .form-group input:focus, .form-group select:focus, .form-group textarea:focus {
@@ -711,6 +785,7 @@
         <nav class="nav-links" id="navLinks">
             <a href="#tarifs" onclick="closeMenu()"><i class="fas fa-tags"></i> Tarifs</a>
             <a href="#clients" onclick="closeMenu()"><i class="fas fa-users"></i> Services</a>
+            <a href="#temoignages" onclick="closeMenu()"><i class="fas fa-comment-dots"></i> Témoignages</a>
             <a href="#partenaires" onclick="closeMenu()"><i class="fas fa-handshake"></i> Partenaires</a>
             <a href="#commander" class="nav-cta" onclick="closeMenu()"><i class="fas fa-paper-plane"></i> Commander</a>
         </nav>
@@ -811,6 +886,61 @@
         </div>
     </section>
 
+    <!-- SECTION CONFIANCE & TÉMOIGNAGES -->
+    <section class="section" id="temoignages" style="padding-top: 0;">
+        <div class="section-header">
+            <h2 class="section-title">Confiance & Témoignages</h2>
+            <p class="section-subtitle">Ce que disent nos clients à Kinshasa. Découvrez les retours de ceux qui nous font confiance pour leurs courses au quotidien.</p>
+        </div>
+
+        <div class="testimonials-grid">
+            <!-- Témoignage 1 -->
+            <div class="testimonial-card">
+                <div>
+                    <div class="testimonial-quote"><i class="fas fa-quote-left"></i></div>
+                    <p class="testimonial-text">"En tant que boutique de vêtements à Gombe, mes clients demandent une livraison immédiate. Mema Nga s'occupe de mes colis avec un soin remarquable et le suivi WhatsApp est top !"</p>
+                </div>
+                <div class="testimonial-user">
+                    <div class="testimonial-avatar">BM</div>
+                    <div class="testimonial-info">
+                        <h5>Boutique Mode Chic</h5>
+                        <p>E-commerce, Gombe</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Témoignage 2 -->
+            <div class="testimonial-card">
+                <div>
+                    <div class="testimonial-quote"><i class="fas fa-quote-left"></i></div>
+                    <p class="testimonial-text">"Un pli confidentiel à acheminer d'urgence de Limete vers le Palais de Justice. Le coursier est arrivé en 25 minutes malgré les bouchons. Réactivité impressionnante."</p>
+                </div>
+                <div class="testimonial-user">
+                    <div class="testimonial-avatar">CJ</div>
+                    <div class="testimonial-info">
+                        <h5>Cabinet Juridique M.</h5>
+                        <p>Limete Résidentiel</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Témoignage 3 -->
+            <div class="testimonial-card">
+                <div>
+                    <div class="testimonial-quote"><i class="fas fa-quote-left"></i></div>
+                    <p class="testimonial-text">"J'avais oublié mes documents importants à Ngaliema alors que j'étais déjà bloqué dans une réunion à Kintambo. Le livreur me les a remis en moins de 45 minutes."</p>
+                </div>
+                <div class="testimonial-user">
+                    <div class="testimonial-avatar">PK</div>
+                    <div class="testimonial-info">
+                        <h5>Patrick K.</h5>
+                        <p>Cadre d'entreprise, Ngaliema</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
     <!-- PARTENAIRES -->
     <section class="section" id="partenaires" style="padding-top: 0;">
         <div class="partners-section">
@@ -836,6 +966,12 @@
 
             <form class="order-form" id="memaNgaForm" onsubmit="envoyerSurWhatsApp(event)">
                 
+                <!-- AJOUT : Numéro de commande généré automatiquement -->
+                <div class="form-group full-width">
+                    <label for="numCommande"><i class="fas fa-hashtag"></i> N° de Commande (Généré automatiquement)</label>
+                    <input type="text" id="numCommande" readonly>
+                </div>
+
                 <div class="form-group">
                     <label for="nom"><i class="fas fa-user"></i> Votre Nom complet</label>
                     <input type="text" id="nom" required placeholder="Ex: Chantal Mulamba">
@@ -964,7 +1100,20 @@
 
     <!-- SCRIPTS -->
     <script>
+        // Génération d'un numéro de commande unique
+        function genererNumeroCommande() {
+            const annee = new Date().getFullYear();
+            const aleatoire = Math.floor(10000 + Math.random() * 90000);
+            return `MEMA-${annee}-${aleatoire}`;
+        }
+
         window.addEventListener('load', () => {
+            // Initialisation du numéro de commande
+            const inputNum = document.getElementById('numCommande');
+            if (inputNum) {
+                inputNum.value = genererNumeroCommande();
+            }
+
             setTimeout(() => {
                 const splash = document.getElementById('splashScreen');
                 if (splash) splash.classList.add('fade-out');
@@ -1004,6 +1153,7 @@
         function envoyerSurWhatsApp(event) {
             event.preventDefault();
 
+            const numCommande = document.getElementById('numCommande').value;
             const nom = document.getElementById('nom').value;
             const telephone = document.getElementById('telephone').value;
             const email = document.getElementById('email').value || 'Non renseigné';
@@ -1021,7 +1171,8 @@
 
             const numeroWhatsApp = "243823176942";
 
-            let message = `📦 *NOUVELLE COMMANDE MEMA NGA* 📦\n\n`;
+            let message = `📦 *NOUVELLE COMMANDE MEMA NGA* 📦\n`;
+            message += `🔖 *N° de Commande :* ${numCommande}\n\n`;
             message += `👤 *Client :* ${nom}\n`;
             message += `📞 *Téléphone :* ${telephone}\n`;
             message += `✉️ *Email :* ${email}\n\n`;
