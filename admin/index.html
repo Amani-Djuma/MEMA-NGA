@@ -1,1 +1,179 @@
 
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MEMA NGA | Administration</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Arial,sans-serif;background:#f3f6fb;color:#18243a}
+.sidebar{position:fixed;left:0;top:0;width:245px;height:100vh;background:#102b50;color:white;padding:25px 18px}
+.logo{font-size:24px;font-weight:bold;margin-bottom:8px}
+.sub{font-size:12px;color:#b8c9df;margin-bottom:35px}
+.sidebar a{display:block;padding:14px;color:#dce8f7;text-decoration:none;border-radius:8px;margin:5px 0;cursor:pointer}
+.sidebar a:hover,.sidebar a.active{background:#245b91;color:white}
+.main{margin-left:245px;padding:30px}
+header{display:flex;justify-content:space-between;align-items:center;margin-bottom:30px;gap:12px}
+header h1{font-size:26px}
+.tag{background:#e0f2e9;color:#147847;padding:9px 14px;border-radius:20px;font-size:12px}
+.welcome{background:linear-gradient(110deg,#123b68,#2475a8);color:white;padding:28px;border-radius:14px;margin-bottom:25px}
+.welcome h2{margin-bottom:10px}
+.cards{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:25px}
+.card{background:white;padding:22px;border-radius:12px;box-shadow:0 3px 12px #102b5010}
+.card small{color:#718096}
+.card h2{font-size:28px;margin-top:12px;color:#174d7c}
+.panel{background:white;padding:23px;border-radius:12px;margin-bottom:20px}
+.panel h3{margin-bottom:15px}
+table{width:100%;border-collapse:collapse}
+th,td{text-align:left;padding:13px;border-bottom:1px solid #edf0f5;font-size:13px}
+th{color:#63748a}
+.status{background:#fff4d9;color:#9a6900;padding:5px 9px;border-radius:15px}
+.btn{background:#17649c;color:white;border:0;padding:11px 16px;border-radius:7px;cursor:pointer}
+.content{display:none}
+.content.active{display:block}
+input,select{padding:11px;border:1px solid #dce3ed;border-radius:7px;margin:5px 5px 10px 0;max-width:100%}
+@media(max-width:800px){
+.sidebar{position:relative;width:100%;height:auto;padding:15px}
+.sidebar a{display:inline-block;padding:9px}
+.main{margin:0;padding:15px}
+.cards{grid-template-columns:repeat(2,1fr)}
+header h1{font-size:20px}
+}
+@media(max-width:420px){.cards{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+
+<aside class="sidebar">
+<div class="logo">MEMa NGA</div>
+<div class="sub">ADMINISTRATION • KINSHASA</div>
+<a class="active" onclick="showPage('dashboard',this)">▦ Tableau de bord</a>
+<a onclick="showPage('colis',this)">📦 Gestion des colis</a>
+<a onclick="showPage('courses',this)">🚚 Gestion des courses</a>
+<a onclick="showPage('clients',this)">👥 Clients</a>
+<a onclick="showPage('finance',this)">💰 Finances</a>
+<a onclick="showPage('messages',this)">✉ Messages</a>
+</aside>
+
+<main class="main">
+<header>
+<h1 id="pageTitle">Tableau de bord</h1>
+<span class="tag">● Interface de démonstration</span>
+</header>
+
+<section id="dashboard" class="content active">
+<div class="welcome">
+<h2>Bienvenue dans MEMA NGA ADMIN</h2>
+<p>Gérez vos activités, vos colis et vos courses depuis un seul espace.</p>
+</div>
+<div class="cards">
+<div class="card"><small>Total des colis</small><h2 id="totalColis">0</h2></div>
+<div class="card"><small>Courses enregistrées</small><h2 id="totalCourses">0</h2></div>
+<div class="card"><small>Clients enregistrés</small><h2 id="totalClients">0</h2></div>
+<div class="card"><small>Messages</small><h2>0</h2></div>
+</div>
+<div class="panel">
+<h3>Activités récentes</h3>
+<p>Aucune activité enregistrée pour le moment.</p>
+</div>
+</section>
+
+<section id="colis" class="content">
+<div class="panel">
+<h3>Enregistrer un colis</h3>
+<form onsubmit="addItem(event,'colis')">
+<input id="colisNom" placeholder="Nom du client" required>
+<input id="colisRef" placeholder="Référence du colis" required>
+<select id="colisType"><option>Dépôt</option><option>Retrait</option></select>
+<button class="btn">Enregistrer</button>
+</form>
+</div>
+<div class="panel">
+<h3>Liste des colis</h3>
+<table><thead><tr><th>Client</th><th>Référence</th><th>Opération</th></tr></thead><tbody id="colisList"></tbody></table>
+</div>
+</section>
+
+<section id="courses" class="content">
+<div class="panel">
+<h3>Enregistrer une course</h3>
+<form onsubmit="addItem(event,'courses')">
+<input id="courseNom" placeholder="Nom du client" required>
+<input id="courseLieu" placeholder="Destination" required>
+<button class="btn">Enregistrer</button>
+</form>
+</div>
+<div class="panel"><h3>Liste des courses</h3><table><thead><tr><th>Client</th><th>Destination</th></tr></thead><tbody id="coursesList"></tbody></table></div>
+</section>
+
+<section id="clients" class="content">
+<div class="panel">
+<h3>Ajouter un client</h3>
+<form onsubmit="addItem(event,'clients')">
+<input id="clientNom" placeholder="Nom complet" required>
+<input id="clientTel" placeholder="Téléphone" required>
+<button class="btn">Ajouter</button>
+</form>
+</div>
+<div class="panel"><h3>Liste des clients</h3><table><thead><tr><th>Nom</th><th>Téléphone</th></tr></thead><tbody id="clientsList"></tbody></table></div>
+</section>
+
+<section id="finance" class="content">
+<div class="panel">
+<h3>Suivi financier</h3>
+<p>La gestion des recettes et dépenses sera connectée à la base de données dans la prochaine étape.</p>
+</div>
+</section>
+
+<section id="messages" class="content">
+<div class="panel">
+<h3>Messages des clients</h3>
+<p>La réception des messages sera configurée lors de la connexion du système.</p>
+</div>
+</section>
+</main>
+
+<script>
+function showPage(id,link){
+document.querySelectorAll('.content').forEach(p=>p.classList.remove('active'));
+document.getElementById(id).classList.add('active');
+document.querySelectorAll('.sidebar a').forEach(a=>a.classList.remove('active'));
+link.classList.add('active');
+document.getElementById('pageTitle').textContent=link.textContent.trim();
+}
+function addItem(event,type){
+event.preventDefault();
+let data=JSON.parse(localStorage.getItem('mema_'+type)||'[]');
+let item;
+if(type==='colis'){
+item={nom:colisNom.value,ref:colisRef.value,type:colisType.value};
+}else if(type==='courses'){
+item={nom:courseNom.value,lieu:courseLieu.value};
+}else{
+item={nom:clientNom.value,tel:clientTel.value};
+}
+data.push(item);
+localStorage.setItem('mema_'+type,JSON.stringify(data));
+event.target.reset();
+render();
+}
+function render(){
+let colis=JSON.parse(localStorage.getItem('mema_colis')||'[]');
+let courses=JSON.parse(localStorage.getItem('mema_courses')||'[]');
+let clients=JSON.parse(localStorage.getItem('mema_clients')||'[]');
+document.getElementById('colisList').innerHTML=colis.map(x=>`<tr><td>${escapeText(x.nom)}</td><td>${escapeText(x.ref)}</td><td>${escapeText(x.type)}</td></tr>`).join('');
+document.getElementById('coursesList').innerHTML=courses.map(x=>`<tr><td>${escapeText(x.nom)}</td><td>${escapeText(x.lieu)}</td></tr>`).join('');
+document.getElementById('clientsList').innerHTML=clients.map(x=>`<tr><td>${escapeText(x.nom)}</td><td>${escapeText(x.tel)}</td></tr>`).join('');
+document.getElementById('totalColis').textContent=colis.length;
+document.getElementById('totalCourses').textContent=courses.length;
+document.getElementById('totalClients').textContent=clients.length;
+}
+function escapeText(s){
+return String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+}
+render();
+</script>
+</body>
+</html>
+
